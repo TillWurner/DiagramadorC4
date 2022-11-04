@@ -21,14 +21,14 @@
                    Diagramdor C4
                 </div>
                 <ul class="list-items">
-                   <li><a href="#"><i class="fas fa-home"></i>Home</a></li>
+                   <li><a href={{route('home')}}><i class="fas fa-home"></i>Home</a></li>
                    @if (Auth::user()->name == "Admin" )
-                   <li><a href="#"><i class="fas fa-address-book"></i>Users</a></li>
+                   <li><a href={{ route('users') }}><i class="fas fa-address-book"></i>Users</a></li>
                    @endif
                    <li><a href="#"><i class="fas fa-user"></i>Profile</a></li>
                    <li><a href="#"><i class="fa fa-project-diagram"></i>My diagrams</a></li>
                    <li><a href="#"><i class="fas fa-network-wired"></i>Shared diagrams</a></li>
-                   <li><a href="#"><i class="fas fa-envelope"></i>Contact us</a></li>
+                   <li><a href={{route('contactus')}}><i class="fas fa-envelope"></i>Contact us</a></li>
                    <li><a href="{{ route('logout') }}"  onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();">
                     <i class="fas fa-door-open">
