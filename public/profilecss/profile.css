@@ -1,0 +1,24 @@
+body{
+    background-image: url('/logincss/img/banner6.jpg');
+}
+.profile{
+    height: 30vh;
+    padding-top: 200px;
+    padding-right: 100px;
+    padding-bottom: 50px;
+    padding-left: 420px;
+}
+.img{
+   /* padding-left: 1px;
+    padding-right: 1px;*/
+    max-width: 125%;
+    min-height: 100%;
+    height: auto;
+    width: auto;
+   /* height: 130px;*/
+    /*width: 400px;*/
+    /*
+    height: 20vh;
+    width: 10vh
+    */
+}

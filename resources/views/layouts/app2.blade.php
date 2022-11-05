@@ -18,7 +18,7 @@
              </label>
              <nav id="sidebar">
                 <div class="title">
-                   Diagramdor C4
+                   Diagramador C4
                 </div>
                 <ul class="list-items">
                    <li><a href={{route('home')}}><i class="fas fa-home"></i>Home</a></li>
