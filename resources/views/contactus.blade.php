@@ -26,8 +26,8 @@
                    <li><a href={{ route('users') }}><i class="fas fa-address-book"></i>Users</a></li>
                    @endif
                    <li><a href={{route('profile', Auth::user()->id)}}><i class="fas fa-user"></i>Profile</a></li>
-                   <li><a href="#"><i class="fa fa-project-diagram"></i>My diagrams</a></li>
-                   <li><a href="#"><i class="fas fa-network-wired"></i>Shared diagrams</a></li>
+                   <li><a href={{route('mydiagrams')}}><i class="fa fa-project-diagram"></i>My diagrams</a></li>
+                   <li><a href={{route('shdiagrams')}}><i class="fas fa-network-wired"></i>Shared diagrams</a></li>
                    <li><a href={{route('contactus')}}><i class="fas fa-envelope"></i>Contact us</a></li>
                    <li><a href="{{ route('logout') }}"  onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();">
