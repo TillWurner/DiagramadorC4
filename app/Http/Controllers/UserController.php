@@ -25,5 +25,11 @@ class UserController extends Controller
         $tipo = "Editar";
         return view('user.personal', compact('users'), compact('tipo'));*/
     }
+    public function profile($id)
+    {
+        $users = User::findOrFail($id);
+        //dd($users);
+        return view('profile.index', compact('users'));
+    }
     
 }
