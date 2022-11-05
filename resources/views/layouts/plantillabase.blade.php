@@ -46,7 +46,8 @@
              </nav>
          </div>
       <!--<section class="section-1" id="content">-->
-        @yield('content')
+         
    <!-- </section>-->
    </body>
+   @yield('content2')
 </html>

@@ -1,14 +1,13 @@
 @extends('layouts.plantillabase')
-@section('content')
+@section('content2')
 <link rel="stylesheet" href={{ asset('usercss/user.css') }}>   <!-- PARA USAR 2 PLANTILLAS CSS-->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-<body>
-    <div class="title">
+<link rel="stylesheet" href={{asset("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css")}} integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <div class="title2">
         <h1>Listado de Usuarios</h1>
     </div>
     @if ($users->isNotEmpty())  <!--Si no esta vacio-->
-    <div class="table" >
-        <table class="table table-dark table-striped">
+    <div class="table">
+        <table class="table table-dark table-striped" id="tablita">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -53,7 +52,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-</body>
+
 <!--
 <div class="card" style="width: 18rem;">
     <img src="..." class="card-img-top" alt="...">
