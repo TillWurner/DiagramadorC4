@@ -5,9 +5,10 @@
     <h1>My Diagrams</h1>
     {{-- <button href= exampleModal >Crear Nuevo</button> --}}
     @include('diagrams.modalagregar')
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Crear Diagrama</button>
+    {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Crear Diagrama</button> --}}
 </div>
 @if ($diagramas->isNotEmpty())  <!--Si no esta vacio-->
+<button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Crear Diagrama</button>
 <div class="table">
     <table class="table table-dark table-striped" id="tablita">
         <thead>
@@ -15,8 +16,9 @@
             <th scope="col">#</th>
             <th scope="col">Nombre</th>
             <th scope="col">Descripcion</th>
-            <th scope="col">Nombre</th>
+            <th scope="col">Autor</th>
             <th scope="col">Codigo</th>
+            <th scope="col">Acciones</th>
             {{-- <th scope="col">Fecha de creacion</th> --}}
           </tr>
         </thead>
@@ -28,13 +30,13 @@
             <td>{{$diagram->desc}}</td>
             <td>{{$diagram->diagu->name}}</td>  {{-- Ocupo la relacion para sacar el atributo de otra tabla --}}
             <td>{{$diagram->code}}</td>
-            {{-- <td>
-                <form action="{{ route('delete', $user->id) }}" method="POST">
+            <td>
+                <form action="{{ route('delete', $diagram->id) }}" method="POST">
                     {{csrf_field()}}
                     {{  method_field('DELETE')}}
                     <button type="submit"><ion-icon name="trash-outline"></ion-icon></button>
                 </form>
-            </td> --}}
+            </td>
           </tr>
             @endforeach
           <!--<tr>
