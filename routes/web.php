@@ -31,4 +31,5 @@ Route::get('/users',[UserController::class, 'index'])->name('users');
 Route::delete('/users{id}',[UserController::class,'delete'])->name('delete');
 Route::get('/users/{id}',[UserController::class,'profile'])->name('profile');
 Route::get('/mydiagram',[DiagramController::class,'mydiagrams'])->name('mydiagrams');
+Route::post('/mydiagram/store',[DiagramController::class, 'store'])->name('diagram.store');
 Route::get('/shdiagram',[DiagramController::class,'shdiagrams'])->name('shdiagrams');

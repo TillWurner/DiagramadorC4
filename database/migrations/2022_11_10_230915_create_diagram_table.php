@@ -17,10 +17,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_user')->nullable();
             $table->foreign('id_user')->on('users')->references('id')->onDelete('cascade');
-            $table->string('nom');
-            $table->string('desc');
-            $table->string('code');
-            $table->string('json');
+            $table->string('nom')->nullable();
+            $table->string('desc')->nullable();
+            $table->string('code')->nullable();
+            $table->string('json')->nullable();
             $table->timestamps();
         });
     }
