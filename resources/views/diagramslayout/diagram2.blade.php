@@ -1,16 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover"/>
+    <meta name="description" content="Drag a link to reconnect it. Nodes have custom Adornments for selection, resizing, and rotating.  The Palette includes links."/> 
+    <link rel="stylesheet" href="{{ asset('site/assets/css/style.css')}}"/> 
+    <!-- Copyright 1998-2022 by Northwoods Software Corporation. -->
+    <title>My Diagram</title>
+    <script src="https://cdn.socket.io/4.5.3/socket.io.min.js" integrity="sha384-WPFUvHkB1aHA5TDSZi6xtDgkF0wXJcIIxXhC6h8OT8EH3fC5PWro5pWJ1THjcfEi" crossorigin="anonymous"></script>
+    <script type="importmap">
+        {
+          "imports": {
+            "socket.io-client": "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"
+          }
+        }
+      </script>
+      <script type="module">
+        import { io } from "socket.io-client";
+    
+    </script>
+  </head>
 
-  <!DOCTYPE html>
-  <html lang="en">
-  <body>
+  <body bgcolor="#ffe4c4">
+    <!-- This top nav is not part of the sample code -->    {{-- TODO ESTO ES LA PARTE DE ARRIBA --}}
+  <nav id="navTop" class="w-full z-30 top-0 text-white bg-nwoods-primary">
+    <div class="w-full container max-w-screen-lg mx-auto flex flex-wrap sm:flex-nowrap items-center justify-between mt-0 py-2">
+      <div class="md:pl-4">
+        <a class="text-white hover:text-white no-underline hover:no-underline
+        font-bold text-2xl lg:text-4xl rounded-lg hover:bg-nwoods-secondary " href="../">
+          <h1 class="mb-0 p-1 ">My Diagram</h1>
+        </a>
+      </div>
+    </div>
+    <hr class="border-b border-gray-600 opacity-50 my-0 py-0" />
+  </nav>
+  <div class="md:flex flex-col md:flex-row md:min-h-screen w-full max-w-screen-xl mx-auto">
+    <div id="navSide" class="flex flex-col w-full md:w-48 text-gray-700 bg-white flex-shrink-0"></div>
+    <!-- * * * * * * * * * * * * * -->
+    <!-- Start of GoJS sample code -->
+
+    {{-- AQUI EMPIEZA LO DIVERTIDO XD --}}
   <script src="https://unpkg.com/gojs@2.2.17/release/go.js"></script>
-  <p>
-    This is a minimalist HTML and JavaScript skeleton of the GoJS Sample
-    <a href="https://gojs.net/latest/samples/blockEditor.html">blockEditor.html</a>. It was automatically generated from a button on the sample page,
-    and does not contain the full HTML. It is intended as a starting point to adapt for your own usage.
-    For many samples, you may need to inspect the
-    <a href="https://github.com/NorthwoodsSoftware/GoJS/blob/master/samples/blockEditor.html">full source on Github</a>
-    and copy other files or scripts.
-  </p>
   <div id="allSampleContent" class="p-4 w-full">
   <script src="https://unpkg.com/gojs@2.2.17/extensions/Figures.js"></script>
   <script src="https://unpkg.com/gojs@2.2.17/extensions/DrawCommandHandler.js"></script>
@@ -386,7 +416,54 @@
           DarkColorButtons(),
           StrokeOptionsButtons()
         );
-
+      
+        // initialize the Palette that is on the left side of the page
+      myPalette =
+        $(go.Palette, "myPaletteDiv",  // must name or refer to the DIV HTML element
+          {
+            maxSelectionCount: 1,
+            nodeTemplateMap: myDiagram.nodeTemplateMap,  // share the templates used by myDiagram
+            linkTemplate: // simplify the link template, just in this Palette
+              $(go.Link,
+                { // because the GridLayout.alignment is Location and the nodes have locationSpot == Spot.Center,
+                  // to line up the Link in the same manner we have to pretend the Link has the same location spot
+                  locationSpot: go.Spot.Center,
+                  selectionAdornmentTemplate:
+                    $(go.Adornment, "Link",
+                      { locationSpot: go.Spot.Center },
+                      $(go.Shape,
+                        { isPanelMain: true, fill: null, stroke: "deepskyblue", strokeWidth: 0 }),
+                      $(go.Shape,  // the arrowhead
+                        { toArrow: "Standard", stroke: null })
+                    )
+                },
+                {
+                  routing: go.Link.AvoidsNodes,
+                  curve: go.Link.JumpOver,
+                  corner: 5,
+                  toShortLength: 4
+                },
+                new go.Binding("points"),
+                $(go.Shape,  // the link path shape
+                  { isPanelMain: true, strokeWidth: 2 }),
+                $(go.Shape,  // the arrowhead
+                  { toArrow: "Standard", stroke: null })
+              ),
+            model: new go.GraphLinksModel([  // specify the contents of the Palette
+              { text: "Container" ,figure: "Rectangle", "size":"75 80", fill: "transparent", strokeWidth: 3,
+            strokeDashArray: [4, 2]  },
+              { text: "Component" ,figure: "Rectangle", "size":"75 80", fill: "blue"},
+              { text: "DataBase", figure: "MagneticData","size":"75 80", fill: "lightgray" },
+              { text: "Software System", figure: "InternalStorage", "size":"75 75", fill: "lightskyblue" },
+              { text: "Web browser", figure: "CreateRequest", "size":"75 75", fill: "lightskyblue" },
+              { text: "Mobile app", figure: "Procedure", "size":"75 75", fill: "#CE0620" },
+              { text: "Class", figure: "Class","size":"75 75", fill: "white" },
+              { text: "User", figure: "BpmnTaskUser","size":"75 75", fill: "blue" }
+            ], [
+                // the Palette also has a disconnected Link, which the user can drag-and-drop
+                { points: new go.List(/*go.Point*/).addAll([new go.Point(0, 0), new go.Point(30, 0), new go.Point(30, 40), new go.Point(60, 40)]) }
+              ])
+          });
 
       // Link template
 
@@ -539,9 +616,14 @@
     }
 
     // Show the diagram's model in JSON format
+    /* $doc = JSON.stringify(document.getElementById("mySavedModel").value); */
     function save() {
+      /* savediag(document.getElementById("mySavedModel").value); */
+      $doc = JSON.stringify(document.getElementById("mySavedModel").value);
+      return $doc;
+      /* console.log($doc);
       document.getElementById("mySavedModel").value = myDiagram.model.toJson();
-      myDiagram.isModified = false;
+      myDiagram.isModified = false; */
     }
     function load() {
       myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
@@ -550,7 +632,10 @@
   </script>
 
 <div id="sample">
-  <div id="myDiagramDiv" style="border: 1px solid black; width: 100%; height: 600px; position: relative; -webkit-tap-highlight-color: rgba(255, 255, 255, 0); cursor: auto;"><canvas tabindex="0" width="1317" height="747" style="position: absolute; top: 0px; left: 0px; z-index: 2; user-select: none; touch-action: none; width: 1054px; height: 598px; cursor: auto;">This text is displayed if your browser does not support the Canvas HTML element.</canvas><div style="position: absolute; overflow: auto; width: 1054px; height: 598px; z-index: 1;"><div style="position: absolute; width: 1px; height: 1px;"></div></div></div>
+  <div style="width: 100%; display: flex; justify-content: space-between">
+    <div id="myPaletteDiv" style="width: 120px; margin-right: 2px; background-color: aquamarine; border: solid 1px black"></div>  {{-- Fondo Palleta --}}
+    <div id="myDiagramDiv" style="flex-grow: 1; height: 620px;background-color: burlywood ;border: solid 1px black"></div>    {{-- Fondo del Diagrama --}}
+  </div>
   <p>
     Double-click in the background to create a new node.
     Create groups by selecting nodes and invoking Ctrl-G; Ctrl-Shift-G to ungroup a selected group.
@@ -566,6 +651,12 @@
   <div id="buttons">
     <button id="loadModel" onclick="load()">Load</button>
     <button id="saveModel" onclick="save()">Save</button>
+    {{-- <a href="{{ route('savediag', $diagram->id) }}" method="POST"></a> --}}
+    {{-- <form action="{{ route('savediag', $doc) }}" method="POST">
+      {{csrf_field()}}
+     <button id="saveModel" onclick="save()">Save</button> --}}
+      {{-- <button type="submit"><ion-icon name="trash-outline"></ion-icon></button> --}} {{-- Boton bonito --}}
+  </form>
   </div>
   <textarea id="mySavedModel" style="width:100%;height:300px">{ "class": "GraphLinksModel",
   "nodeDataArray": [

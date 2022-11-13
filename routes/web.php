@@ -34,4 +34,5 @@ Route::get('/mydiagram',[DiagramController::class,'mydiagrams'])->name('mydiagra
 Route::delete('/mydiagram{id}',[DiagramController::class,'delete'])->name('delete');
 /* Route::get('/mydiagram{id}',[DiagramController::class,'mydiagrams'])->name('mydiagrams'); */
 Route::post('/mydiagram/store',[DiagramController::class, 'store'])->name('diagram.store');
+/* Route::post('/mydiagram/savediag',[DiagramController::class, 'savediag'])->name('diagram.savediag'); */
 Route::get('/shdiagram',[DiagramController::class,'shdiagrams'])->name('shdiagrams');

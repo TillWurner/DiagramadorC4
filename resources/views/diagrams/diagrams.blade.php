@@ -7,7 +7,18 @@
     @include('diagrams.modalagregar')
     {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Crear Diagrama</button> --}}
 </div>
-@if ($diagramas->isNotEmpty())  <!--Si no esta vacio-->
+
+{{-- @php
+$bandera = false; 
+@endphp --}}
+{{-- <?php  echo "<script>console.log({$exist})</script>" ?>  --}}{{-- PARA HACER UN CONSOLE LOG --}}
+{{-- @foreach ($diagramas as $diagram)
+
+    @if ($diagram->id_user == $idAuth)
+        $bandera = true;
+    @endif
+@endforeach --}}
+@if ($diagramas->isNotEmpty() and $exist == 1)  <!--Si no esta vacio-->   <!--Si existen diagramas del usuario-->
 <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Crear Diagrama</button>
 <div class="table">
     <table class="table table-dark table-striped" id="tablita">
@@ -23,21 +34,26 @@
           </tr>
         </thead>
         <tbody>
-            @foreach ($diagramas as $diagram)
-          <tr>
-            <th scope="row">{{$diagram->id}}</th>
-            <td>{{$diagram->nom}}</td>
-            <td>{{$diagram->desc}}</td>
-            <td>{{$diagram->diagu->name}}</td>  {{-- Ocupo la relacion para sacar el atributo de otra tabla --}}
-            <td>{{$diagram->code}}</td>
-            <td>
-                <form action="{{ route('delete', $diagram->id) }}" method="POST">
-                    {{csrf_field()}}
-                    {{  method_field('DELETE')}}
-                    <button type="submit"><ion-icon name="trash-outline"></ion-icon></button>
-                </form>
-            </td>
-          </tr>
+            @foreach ($diagramas as $diagram) 
+            @if ($diagram->id_user == $idAuth)
+            <tr>
+              <th scope="row">{{$diagram->id}}</th>
+              <td>{{$diagram->nom}}</td>
+              <td>{{$diagram->desc}}</td>
+              <td>{{$diagram->diagu->name}}</td>  {{-- Ocupo la relacion para sacar el atributo de otra tabla --}}
+              <td>{{$diagram->code}}</td>
+              <td>
+                  <form action="{{ route('delete', $diagram->id) }}" method="POST">
+                      {{csrf_field()}}
+                      {{  method_field('DELETE')}}
+                      <a href="#" class="btn btn-link"><ion-icon name="trash-outline"></ion-icon></a>
+                      <button type="submit" class="btn btn-link"><ion-icon name="trash-outline"></ion-icon></button>
+                      {{-- <button type="submit"><ion-icon name="trash-outline"></ion-icon></button> --}} {{-- Boton bonito --}}
+                  </form>
+                  
+              </td>
+            </tr>
+            @endif
             @endforeach
           <!--<tr>
             <th scope="row">2</th>
