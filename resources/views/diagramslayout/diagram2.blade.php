@@ -651,6 +651,12 @@
   <div id="buttons">
     <button id="loadModel" onclick="load()">Load</button>
     <button id="saveModel" onclick="save()">Save</button>
+    {{-- <a onclick="save()" href="{{ route('savediag', $id, $doc) }}">GUARDAR</a>
+    <form method="POST" action="{{url("/mydiagram")}}">
+    {{ method_field('PUT')}}
+    {{ csrf_field() }} --}}
+
+    </form>
     {{-- <a href="{{ route('savediag', $diagram->id) }}" method="POST"></a> --}}
     {{-- <form action="{{ route('savediag', $doc) }}" method="POST">
       {{csrf_field()}}

@@ -24,6 +24,7 @@ class DiagramController extends Controller
     {
         $exist = $this->existeDiag();
         $idAuth = Auth()->user()->id;
+        /* $idAuth = $id; */
         $diagramas = Diagramas::all(); 
         //return view('diagrams.diagrams2');
         return view('diagrams.diagrams', compact('diagramas','idAuth','exist'));
@@ -47,8 +48,9 @@ class DiagramController extends Controller
             'code' => $clave,
             'json' => request('json')
         ]);
+        $auth=auth()->user()->id;
         /* $diagramas = new Diagramas();
-
+        
         $diagramas->nom = $request->get('name');
         $diagramas->desc = $request->get('desc');
         $diagramas->id_user = auth()->user()->id;
@@ -58,6 +60,7 @@ class DiagramController extends Controller
     public function delete($id)
     {
         //$user = User::where('id', $id);
+        /* $auth=auth()->user()->id; */
         $diagramas = Diagramas::findOrFail($id);
         $diagramas->delete();
        // $id->delete();
@@ -67,23 +70,34 @@ class DiagramController extends Controller
         $tipo = "Editar";
         return view('user.personal', compact('users'), compact('tipo'));*/
     }
-    public function creatediagram(){
-        return view('diagramslayout.diagram2');
+    public function diag($id){
+
+        /* $diagram = Diagramas::findOrFail($id) */;
+        return view('diagramslayout\diagramgen', compact('id'));
     }
     public function shdiagrams()
     {
         /* return view('diagrams.menu'); */
         return view('diagramslayout.diagram2');
     }
-    /* public function savediag(Request $request, $content)
+    public function savediag(Diagramas $id, $content)
     {
-        /* $diagram=Diagramas::findOrFail($id);
+        $diagramas = Diagramas::findOrFail($id);
+        $credentials = Request()->validate([
+            'json' => ['required'],
+        ]);
+
+        $diagramas->update($content);
+
+        return view('diagramslayout\diagramgen', compact('id'));
+
+        /*  $diagram=Diagramas::findOrFail($id);
         $auth = $diagram -> id_user;
         $me = Auth()->user()->id;
         if($auth == $me){
             return 0;
-        } */
-        /* $prueba = 0;
+        } 
+        $prueba = 0;
         $diagram=Diagramas::findOrFail($id);
         $auth = $diagram -> id_user;
         $idAuth = Auth()->user()->id;
@@ -99,6 +113,6 @@ class DiagramController extends Controller
             if($auth == $idAuth){
                 $prueba = 1;
             }
-        return $prueba;
-    } */
+        return $prueba; */
+    }
 }
