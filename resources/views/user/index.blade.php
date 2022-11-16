@@ -23,7 +23,7 @@
                 <td>{{$user->name}}</td>
                 <td>{{$user->email}}</td>
                 <td>
-                    <form action="{{ route('delete', $user->id) }}" method="POST">
+                    <form action="{{ route('deletes', $user->id) }}" method="POST">
                         {{csrf_field()}}
                         {{  method_field('DELETE')}}
                         <button type="submit"><ion-icon name="trash-outline"></ion-icon></button>

@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    {{-- AJAX --}}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    {{-- AJAX --}}
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover"/>
     <meta name="description" content="Drag a link to reconnect it. Nodes have custom Adornments for selection, resizing, and rotating.  The Palette includes links."/> 
@@ -62,6 +66,7 @@
             "draggingTool.isGridSnapEnabled": true,
             handlesDragDropForTopLevelParts: true,
             mouseDrop: e => {
+
                 console.log('MOVER');
               // when the selection is dropped in the diagram's background,
               // make sure the selected Parts no longer belong to any Group
@@ -619,11 +624,12 @@
     /* $doc = JSON.stringify(document.getElementById("mySavedModel").value); */
     function save() {
       /* savediag(document.getElementById("mySavedModel").value); */
-      $doc = JSON.stringify(document.getElementById("mySavedModel").value);
-      return $doc;
-      /* console.log($doc);
+      $doc = document.getElementById("mySavedModel").value;
+       /* return $doc;  */
+       document.getElementById("mensaje").value = $doc;
+       console.log($doc);    /* FUNCIONA(BORRAR EL RETURN) */
       document.getElementById("mySavedModel").value = myDiagram.model.toJson();
-      myDiagram.isModified = false; */
+      myDiagram.isModified = false;
     }
     function load() {
       myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
@@ -648,44 +654,46 @@
     Use the context menu to change the color, thickness, dashed-ness, and which side the link should connect with.
     Press the F2 key to start editing the label of a selected link.
   </p>
+    <script type="text/javascript">
+      /* var ref = 3 ;    // declaración de la variable  */
+      /* $( document ).ready(function() {
+        // Definimos las variables de javascrpt
+
+        var refi = 10;
+    
+        // Ejecutamos AJAX
+
+      $("#contenedor").load("diagram2.blade.php",{ref:refi});
+      }); */
+      
+    </script>
+      <?php
+            /* $doc = $_REQUEST['ref']; */
+            // Ahora podemos operar con estas variables como con cualquier variable de PHP
+            $doc = 15;
+            /* echo "<script>document.writeln(doc);</script>"; */ // igualar el valor de la variable JavaScript a PHP  */
+            /* echo $doc   // muestra el resultado  */
+            /* $doc = 15; */
+           echo "<script>console.log({$doc})</script>"   
+      ?>
+
   <div id="buttons">
     <button id="loadModel" onclick="load()">Load</button>
     <button id="saveModel" onclick="save()">Save</button>
-    {{-- <a onclick="save()" href="{{ route('savediag', $id, $doc) }}">GUARDAR</a>
-    <form method="POST" action="{{url("/mydiagram")}}">
-    {{ method_field('PUT')}}
-    {{ csrf_field() }} --}}
-
-    </form>
-    {{-- <a href="{{ route('savediag', $diagram->id) }}" method="POST"></a> --}}
-    {{-- <form action="{{ route('savediag', $doc) }}" method="POST">
+    {{-- <?php $doc = 0?> --}}
+    <form method="POST" action="{{url('/diag/'.$id)}}">
+     {{method_field('POST')}}
       {{csrf_field()}}
-     <button id="saveModel" onclick="save()">Save</button> --}}
+      <input type="text"  name="json" id="mensaje" {{-- value= "<?php echo $doc?>" --}}>
+      <input  name="json2" type = 'hidden' id="mensaje">
+      <button type="submit" >Guardar</button>   {{-- EL BOTON NO DEBE TENER NAME --}}
+    </form>
       {{-- <button type="submit"><ion-icon name="trash-outline"></ion-icon></button> --}} {{-- Boton bonito --}}
   </form>
   </div>
-  <textarea id="mySavedModel" style="width:100%;height:300px">{ "class": "GraphLinksModel",
-  "nodeDataArray": [
-{"key":1, "loc":"0 0", "text":"Alpha", "details":"some information about Alpha and its importance"},
-{"key":2, "loc":"170 0", "text":"Beta", "color":"blue", "thickness":2, "figure":"Procedure"},
-{"key":3, "loc":"0 100", "text":"Gamma", "color":"green", "figure":"Cylinder1"},
-{"key":4, "loc":"80 180", "text":"Delta", "color":"red", "figure":"Terminator", "size":"80 40"},
-{"key":5, "loc":"350 -50", "text":"Zeta", "group":7, "color":"blue", "figure":"CreateRequest"},
-{"key":6, "loc":"350 50", "text":"Eta", "group":7, "figure":"Document", "fill":"lightyellow"},
-{"key":7, "isGroup":true, "text":"Theta", "color":"green", "fill":"lightgreen"},
-{"key":8, "loc":"520 50", "text":"Iota", "fill":"pink"}
- ],
-  "linkDataArray": [
-{"from":1, "to":2, "dash":[ 6,3 ], "thickness":4},
-{"from":1, "to":3, "dash":[ 2,4 ], "color":"green", "text":"label"},
-{"from":3, "to":4, "color":"red", "text":"a red label", "fromSpot":"RightSide"},
-{"from":2, "to":1},
-{"from":5, "to":6, "text":"in a group"},
-{"from":2, "to":7},
-{"from":6, "to":8, "dir":0},
-{"from":6, "to":8, "dir":1},
-{"from":6, "to":8, "dir":2}
- ]}
+  <textarea id="mySavedModel" style="width:100%;height:300px">{ 
+      {{ $var }}
+  }
   </textarea>
 <p class="text-xs">GoJS version 2.2.17. Copyright 1998-2022 by Northwoods Software.</p></div>
     <p><a href="https://github.com/NorthwoodsSoftware/GoJS/blob/master/samples/blockEditor.html" target="_blank">View this sample page's source on GitHub</a></p></div>

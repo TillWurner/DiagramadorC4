@@ -73,23 +73,36 @@ class DiagramController extends Controller
     public function diag($id){
 
         /* $diagram = Diagramas::findOrFail($id) */;
-        return view('diagramslayout\diagramgen', compact('id'));
+        $diagramas = Diagramas::findOrFail($id);
+        $diagramas->json;
+        $var = $diagramas->json;
+        return view('diagramslayout\diagramgen', compact('id','var'));
     }
     public function shdiagrams()
     {
         /* return view('diagrams.menu'); */
         return view('diagramslayout.diagram2');
     }
-    public function savediag(Diagramas $id, $content)
+    /* public function loaddiag($id, Request $request)
     {
         $diagramas = Diagramas::findOrFail($id);
-        $credentials = Request()->validate([
+        $diagramas->json;
+        $var = $diagramas->json;
+        return view('diagramslayout\diagramgen', ['var' => $var]);
+    } */
+    public function savediag($id, Request $request)
+    {
+        /* $data = request()->all(); */
+         $diagramas = Diagramas::findOrFail($id);
+         $diagramas->json = $request->input('json');
+        /* $credentials = Request()->validate([
             'json' => ['required'],
-        ]);
+        ]); */
 
-        $diagramas->update($content);
-
-        return view('diagramslayout\diagramgen', compact('id'));
+         $diagramas->save();
+        /* return $request->input('json'); */
+        return $request->input('json');
+        // return view('diagramslayout\diagramgen', compact('id'));
 
         /*  $diagram=Diagramas::findOrFail($id);
         $auth = $diagram -> id_user;

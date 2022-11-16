@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('nom')->nullable();
             $table->string('desc')->nullable();
             $table->string('code')->nullable();
-            $table->string('json')->nullable();
+            $table->json('json')->nullable();
             $table->timestamps();
         });
     }

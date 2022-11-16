@@ -28,12 +28,13 @@ Auth::routes();
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/contactus', [ContactusController::class, 'contactus'])->name('contactus');
 Route::get('/users',[UserController::class, 'index'])->name('users');
-Route::delete('/users{id}',[UserController::class,'delete'])->name('delete');
+Route::delete('/users{id}',[UserController::class,'delete'])->name('deletes');
 Route::get('/users/{id}',[UserController::class,'profile'])->name('profile');
 Route::get('/mydiagram',[DiagramController::class,'mydiagrams'])->name('mydiagrams');
-Route::delete('/mydiagram{id}',[DiagramController::class,'delete'])->name('delete');
+Route::delete('/mydiagram/{id}',[DiagramController::class,'delete'])->name('delete');
 /* Route::get('/mydiagram{id}',[DiagramController::class,'mydiagrams'])->name('mydiagrams'); */
 Route::post('/mydiagram/store',[DiagramController::class, 'store'])->name('diagram.store');
-Route::put('/mydiagram',[DiagramController::class, 'savediag'])->name('diagram.savediag');     /* Meter el JSON */
+Route::post('/diag/{id}',[DiagramController::class, 'savediag'])->name('diagram.savediag');     /* Meter el JSON */
 Route::get('/shdiagram',[DiagramController::class,'shdiagrams'])->name('shdiagrams');
 Route::get('/diag/{id}',[DiagramController::class,'diag'])->name('diag');
+/* Route::get('/diag/{id}',[DiagramController::class,'loaddiag'])->name('load'); */
