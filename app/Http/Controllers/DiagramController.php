@@ -64,11 +64,7 @@ class DiagramController extends Controller
         $diagramas = Diagramas::findOrFail($id);
         $diagramas->delete();
        // $id->delete();
-        return redirect()->route('mydiagrams');
-        //return view('user.index', compact('users'));
-        /*$users = User::where('id', $id)->get();
-        $tipo = "Editar";
-        return view('user.personal', compact('users'), compact('tipo'));*/
+        return redirect()->route('mydiagrams');   
     }
     public function diag($id){
 
@@ -78,10 +74,16 @@ class DiagramController extends Controller
         $var = $diagramas->json;
         return view('diagramslayout\diagramgen', compact('id','var'));
     }
+    public function sharediag(Request $request){
+        $inv = $request->input('code');
+        $diagramas = Diagramas::all(); 
+        return view('diagrams.shdiagrams', compact('inv', 'diagramas'));
+    }
     public function shdiagrams()
     {
+        $inv = 0;
         /* return view('diagrams.menu'); */
-        return view('diagramslayout.diagram2');
+        return view('diagrams.shdiagrams', compact('inv'));
     }
     /* public function loaddiag($id, Request $request)
     {
@@ -101,8 +103,8 @@ class DiagramController extends Controller
 
          $diagramas->save();
         /* return $request->input('json'); */
-        return $request->input('json');
-        // return view('diagramslayout\diagramgen', compact('id'));
+        /* return $request->input('json'); */
+        return redirect()->route('mydiagrams');
 
         /*  $diagram=Diagramas::findOrFail($id);
         $auth = $diagram -> id_user;

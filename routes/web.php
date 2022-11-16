@@ -32,9 +32,9 @@ Route::delete('/users{id}',[UserController::class,'delete'])->name('deletes');
 Route::get('/users/{id}',[UserController::class,'profile'])->name('profile');
 Route::get('/mydiagram',[DiagramController::class,'mydiagrams'])->name('mydiagrams');
 Route::delete('/mydiagram/{id}',[DiagramController::class,'delete'])->name('delete');
-/* Route::get('/mydiagram{id}',[DiagramController::class,'mydiagrams'])->name('mydiagrams'); */
 Route::post('/mydiagram/store',[DiagramController::class, 'store'])->name('diagram.store');
-Route::post('/diag/{id}',[DiagramController::class, 'savediag'])->name('diagram.savediag');     /* Meter el JSON */
 Route::get('/shdiagram',[DiagramController::class,'shdiagrams'])->name('shdiagrams');
+Route::post('/shdiagram',[DiagramController::class, 'sharediag'])->name('diagram.share');
+Route::post('/diag/{id}',[DiagramController::class, 'savediag'])->name('diagram.savediag');     /* Meter el JSON */
 Route::get('/diag/{id}',[DiagramController::class,'diag'])->name('diag');
 /* Route::get('/diag/{id}',[DiagramController::class,'loaddiag'])->name('load'); */

@@ -654,7 +654,7 @@
     Use the context menu to change the color, thickness, dashed-ness, and which side the link should connect with.
     Press the F2 key to start editing the label of a selected link.
   </p>
-    <script type="text/javascript">
+    {{-- <script type="text/javascript">
       /* var ref = 3 ;    // declaración de la variable  */
       /* $( document ).ready(function() {
         // Definimos las variables de javascrpt
@@ -675,8 +675,7 @@
             /* echo $doc   // muestra el resultado  */
             /* $doc = 15; */
            echo "<script>console.log({$doc})</script>"   
-      ?>
-
+      ?> --}}
   <div id="buttons">
     <button id="loadModel" onclick="load()">Load</button>
     <button id="saveModel" onclick="save()">Save</button>
@@ -691,9 +690,9 @@
       {{-- <button type="submit"><ion-icon name="trash-outline"></ion-icon></button> --}} {{-- Boton bonito --}}
   </form>
   </div>
-  <textarea id="mySavedModel" style="width:100%;height:300px">{ 
+  <textarea id="mySavedModel" style="width:100%;height:300px">
       {{ $var }}
-  }
+  
   </textarea>
 <p class="text-xs">GoJS version 2.2.17. Copyright 1998-2022 by Northwoods Software.</p></div>
     <p><a href="https://github.com/NorthwoodsSoftware/GoJS/blob/master/samples/blockEditor.html" target="_blank">View this sample page's source on GitHub</a></p></div>
