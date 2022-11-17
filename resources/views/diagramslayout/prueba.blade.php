@@ -22,8 +22,8 @@
       <script type="module">
         import { io } from "socket.io-client";
     </script>
-    @livewireStyles
-    @livewireScripts
+     @livewireStyles
+     @livewireScripts
   </head>
 
   <body bgcolor="#ffe4c4">
@@ -83,9 +83,6 @@
                 // console.log(diagrama);
                 myDiagram.model = go.Model.fromJson(diagrama);
                 document.getElementById("mySavedModel").value = diagrama;
-                $doc = document.getElementById("mySavedModel").value;
-                 /* return $doc;  */
-                document.getElementById("mensaje").value = $doc;
               } );
               //  console.log(myDiagram.model.toJson()); 
             },
@@ -639,19 +636,16 @@
     // Show the diagram's model in JSON format
     /* $doc = JSON.stringify(document.getElementById("mySavedModel").value); */
     function save() {
-      /* savediag(document.getElementById("mySavedModel").value); */
-      $doc = document.getElementById("mySavedModel").value;
-       /* return $doc;  */
-       document.getElementById("mensaje").value = $doc;
-       console.log($doc);    /* FUNCIONA(BORRAR EL RETURN) */
       document.getElementById("mySavedModel").value = myDiagram.model.toJson();
       myDiagram.isModified = false;
+      Livewire.emit('savediagram');
     }
     function load() {
       myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
     }
     window.addEventListener('DOMContentLoaded', init);
   </script>
+  @livewire('save-diagram');
 
 <div id="sample">
   <div style="width: 100%; display: flex; justify-content: space-between">
@@ -670,17 +664,13 @@
     Use the context menu to change the color, thickness, dashed-ness, and which side the link should connect with.
     Press the F2 key to start editing the label of a selected link.
   </p>
+
   <div id="buttons">
     <button id="loadModel" onclick="load()">Load</button>
     <button id="saveModel" onclick="save()">Save</button>
-    <form method="POST" action="{{url('/diag/'.$id)}}">
-     {{method_field('POST')}}
-      {{csrf_field()}}
-      <input type="text"  name="json" id="mensaje" {{-- value= "<?php echo $doc?>" --}}>
-      <button type="submit" >Guardar</button>   {{-- EL BOTON NO DEBE TENER NAME --}}
-    </form>
+    {{-- <?php $doc = 0?> --}}
+
       {{-- <button type="submit"><ion-icon name="trash-outline"></ion-icon></button> --}} {{-- Boton bonito --}}
-  </form>
   </div>
   <textarea id="mySavedModel" style="width:100%;height:300px">
       {{ $var }}
