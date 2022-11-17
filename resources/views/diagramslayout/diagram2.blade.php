@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+{{-- ***CSS*** --}}
+<link rel="stylesheet" href={{ asset('gojscss/diagram.css') }}>
+{{-- ***CSS*** --}}
 <html lang="en">
   <head>
     {{-- AJAX --}}
@@ -40,7 +43,20 @@
     <hr class="border-b border-gray-600 opacity-50 my-0 py-0" />
   </nav>
   <div class="md:flex flex-col md:flex-row md:min-h-screen w-full max-w-screen-xl mx-auto">
-    <div id="navSide" class="flex flex-col w-full md:w-48 text-gray-700 bg-white flex-shrink-0"></div>
+    <div id="navSide" class="flex flex-col w-full md:w-48 text-gray-700 bg-white flex-shrink-0"> {{-- TODO EL SIDEBAR --}}
+      <div id="buttons" >
+        <button id="loadModel" onclick="load()">Load</button>
+        <button id="saveModel" onclick="save()">Save</button>
+        <form method="POST" action="{{url('/diag/'.$id)}}">
+         {{method_field('POST')}}
+          {{csrf_field()}}
+          <input type="hidden"  name="json" id="mensaje" >
+          <button class="btn btn-secondary" type="submit" >Guardar</button>   {{-- EL BOTON NO DEBE TENER NAME --}}
+        </form>
+          {{-- <button type="submit"><ion-icon name="trash-outline"></ion-icon></button> --}} {{-- Boton bonito --}}
+      </form>
+      </div>
+    </div>
     <!-- * * * * * * * * * * * * * -->
     <!-- Start of GoJS sample code -->
 
@@ -670,18 +686,6 @@
     Use the context menu to change the color, thickness, dashed-ness, and which side the link should connect with.
     Press the F2 key to start editing the label of a selected link.
   </p>
-  <div id="buttons">
-    <button id="loadModel" onclick="load()">Load</button>
-    <button id="saveModel" onclick="save()">Save</button>
-    <form method="POST" action="{{url('/diag/'.$id)}}">
-     {{method_field('POST')}}
-      {{csrf_field()}}
-      <input type="text"  name="json" id="mensaje" {{-- value= "<?php echo $doc?>" --}}>
-      <button type="submit" >Guardar</button>   {{-- EL BOTON NO DEBE TENER NAME --}}
-    </form>
-      {{-- <button type="submit"><ion-icon name="trash-outline"></ion-icon></button> --}} {{-- Boton bonito --}}
-  </form>
-  </div>
   <textarea id="mySavedModel" style="width:100%;height:300px">
       {{ $var }}
   
