@@ -42,20 +42,27 @@
     </div>
     <hr class="border-b border-gray-600 opacity-50 my-0 py-0" />
   </nav>
+  
   <div class="md:flex flex-col md:flex-row md:min-h-screen w-full max-w-screen-xl mx-auto">
-    <div id="navSide" class="flex flex-col w-full md:w-48 text-gray-700 bg-white flex-shrink-0"> {{-- TODO EL SIDEBAR --}}
-      <div id="buttons" >
-        <button id="loadModel" onclick="load()">Load</button>
-        <button id="saveModel" onclick="save()">Save</button>
+    <div class="navSide"> {{-- TODO EL SIDEBAR --}}
+        <br>
+        <h1 class="titlenav">Bienvenido!</h1>
+        <h1 class="welcome">Piensa, diseña y </h1>
+        <h1 class="welcome">programa!</h1>
+        <br>
+        <button class="btn btn-secondary">Exportar Diagrama</button>
+        <button class="btn btn-secondary">Exportar Jpg</button>
+        <button class="btn btn-secondary">Compartir Diagrama</button>
         <form method="POST" action="{{url('/diag/'.$id)}}">
-         {{method_field('POST')}}
-          {{csrf_field()}}
-          <input type="hidden"  name="json" id="mensaje" >
-          <button class="btn btn-secondary" type="submit" >Guardar</button>   {{-- EL BOTON NO DEBE TENER NAME --}}
-        </form>
+          {{method_field('POST')}}
+           {{csrf_field()}}
+           <input type="hidden"  name="json" id="mensaje" >
+           <button class="btn btn-secondary"  type="submit" >Guardar Diagrama</button>   {{-- EL BOTON NO DEBE TENER NAME --}}
+         </form>
           {{-- <button type="submit"><ion-icon name="trash-outline"></ion-icon></button> --}} {{-- Boton bonito --}}
-      </form>
-      </div>
+          <a href={{route('home')}}>
+            <button class="btn btn-secondary">Salirse</button>
+          </a>
     </div>
     <!-- * * * * * * * * * * * * * -->
     <!-- Start of GoJS sample code -->
@@ -686,7 +693,7 @@
     Use the context menu to change the color, thickness, dashed-ness, and which side the link should connect with.
     Press the F2 key to start editing the label of a selected link.
   </p>
-  <textarea id="mySavedModel" style="width:100%;height:300px">
+  <textarea style="visibility: hidden" id="mySavedModel" style="width:100%;height:300px">
       {{ $var }}
   
   </textarea>

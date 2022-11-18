@@ -1,4 +1,45 @@
-.btn.btn-secondary {
-    background-color:  #4762bc;
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+
+.titlenav{
+    color: black;
+    font-family: 'Poppins',sans-serif;
+    font-size: 35px;
+}
+.welcome{
+    font-family: 'Poppins',sans-serif;
+    display: flex;         /*  Centramos las palabras */
+    justify-content: center;        /* Centramos las palabras */
+    color: black;
+    font-size: 20px;
+}
+.navSide{
+    background-color:  #87493083;
+    margin: 15px;
+    height: 635px;
+    width: 250px;
+    border-radius: 0.5rem;
     box-shadow: 0px 1px 10px rgba(0,0,0,0.2);
 }
+.btn.btn-secondary {
+    font-family: 'Poppins',sans-serif;
+    font-size: 14px;
+    margin: 7px;
+    width: 195px;
+    height: 32px;
+    border: none;
+    color: rgb(0, 0, 0);
+    background-color:  #4a65d0;
+    border-radius: 4px ;
+    box-shadow: inset 0 0 0 0 #aeacac;
+    transition: ease-out 0.5s;
+    outline: none;
+}
+.btn.btn-secondary:hover {
+    box-shadow: inset 300px 0 0 0 #aeacac;
+    cursor: pointer;
+    color: black;
+}
+
+
+
+
