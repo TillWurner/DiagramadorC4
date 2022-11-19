@@ -1,14 +1,19 @@
 <!DOCTYPE html>
+<link rel="stylesheet" href={{asset("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css")}} integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 {{-- ***CSS*** --}}
 <link rel="stylesheet" href={{ asset('gojscss/diagram.css') }}>
-{{-- ***CSS*** --}}
+{{-- ***ParaPdf*** --}}
+{{-- <script src="https://unpkg.com/gojs"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script> --}}
+{{-- ***ParaPdf*** --}}
 <html lang="en">
   <head>
-    {{-- AJAX --}}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-    {{-- AJAX --}}
     <meta charset="utf-8"/>
+   {{--***SCRIPTS-BOOTSTRAP-MODAL*** --}}
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+    {{--***SCRIPTS-BOOTSTRAP-MODAL*** --}}
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover"/>
     <meta name="description" content="Drag a link to reconnect it. Nodes have custom Adornments for selection, resizing, and rotating.  The Palette includes links."/> 
     <link rel="stylesheet" href="{{ asset('site/assets/css/style.css')}}"/> 
@@ -28,8 +33,7 @@
     @livewireStyles
     @livewireScripts
   </head>
-
-  <body bgcolor="#ffe4c4">
+  <body>
     <!-- This top nav is not part of the sample code -->    {{-- TODO ESTO ES LA PARTE DE ARRIBA --}}
   <nav id="navTop" class="w-full z-30 top-0 text-white bg-nwoods-primary">
     <div class="w-full container max-w-screen-lg mx-auto flex flex-wrap sm:flex-nowrap items-center justify-between mt-0 py-2">
@@ -42,28 +46,32 @@
     </div>
     <hr class="border-b border-gray-600 opacity-50 my-0 py-0" />
   </nav>
-  
   <div class="md:flex flex-col md:flex-row md:min-h-screen w-full max-w-screen-xl mx-auto">
-    <div class="navSide"> {{-- TODO EL SIDEBAR --}}
+      <div class="navSide" > {{-- TODO EL SIDEBAR --}}
         <br>
         <h1 class="titlenav">Bienvenido!</h1>
         <h1 class="welcome">Piensa, diseña y </h1>
         <h1 class="welcome">programa!</h1>
         <br>
         <button class="btn btn-secondary">Exportar Diagrama</button>
-        <button class="btn btn-secondary">Exportar Jpg</button>
-        <button class="btn btn-secondary">Compartir Diagrama</button>
+        <button class="btn btn-secondary" onclick="pdf()">Exportar PDF</button>
+        <button class="btn btn-secondary" onclick="makeBlob()">Exportar Jpg</button>
+        <button class="btn btn-secondary" onclick="imprimir()">Imprimir</button>
+        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModalCenter">Compartir Diagrama</button>
+        @if ($user == $autor)
         <form method="POST" action="{{url('/diag/'.$id)}}">
           {{method_field('POST')}}
            {{csrf_field()}}
            <input type="hidden"  name="json" id="mensaje" >
            <button class="btn btn-secondary"  type="submit" >Guardar Diagrama</button>   {{-- EL BOTON NO DEBE TENER NAME --}}
-         </form>
+         </form>    
+        @endif
           {{-- <button type="submit"><ion-icon name="trash-outline"></ion-icon></button> --}} {{-- Boton bonito --}}
           <a href={{route('home')}}>
             <button class="btn btn-secondary">Salirse</button>
           </a>
     </div>
+    
     <!-- * * * * * * * * * * * * * -->
     <!-- Start of GoJS sample code -->
 
@@ -72,6 +80,7 @@
   <div id="allSampleContent" class="p-4 w-full">
   <script src="https://unpkg.com/gojs@2.2.17/extensions/Figures.js"></script>
   <script src="https://unpkg.com/gojs@2.2.17/extensions/DrawCommandHandler.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
     <script id="code" type="text/javascript">
       const socket = io("http://127.0.0.1:3000/", {
             transports: ["websocket"]
@@ -79,7 +88,6 @@
         const sala = <?php echo $id ?> 
         console.log(sala);
         socket.emit('unirme_sala', sala );
-
     function init() {
 
       // Since 2.2 you can also author concise templates with method chaining instead of GraphObject.make
@@ -674,14 +682,51 @@
       myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
     }
     window.addEventListener('DOMContentLoaded', init);
+
+    function pdf(){
+      window.print();
+    }
+    function imprimir(){
+      window.print();
+    }
+    /***FUNCION PARA GUARDAR EN TIPO IMAGEN***/
+
+    function myCallback(blob) {
+      var url = window.URL.createObjectURL(blob);
+      var filename = "MyDiagram.jpg";
+
+      var a = document.createElement("a");
+      a.style = "display: none";
+      a.href = url;
+      a.download = filename;
+      // IE 11
+      if (window.navigator.msSaveBlob !== undefined) {
+        window.navigator.msSaveBlob(blob, filename);
+        return;
+      }
+
+      document.body.appendChild(a);
+      requestAnimationFrame(() => {
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      });
+    }
+
+    function makeBlob() {
+      var blob = myDiagram.makeImageData({ background: "white", returnType: "blob", callback: myCallback });
+    }
+    window.addEventListener('DOMContentLoaded', init);
+    
   </script>
 
-<div id="sample">
+<div id="sample" >
   <div style="width: 100%; display: flex; justify-content: space-between">
-    <div id="myPaletteDiv" style="width: 120px; margin-right: 2px; background-color: aquamarine; border: solid 1px black"></div>  {{-- Fondo Palleta --}}
+    <div id="myPaletteDiv" class='no-print' style="width: 120px; margin-right: 2px; background-color: aquamarine; border: solid 1px black"></div>  {{-- Fondo Palleta --}}
     <div id="myDiagramDiv" style="flex-grow: 1; height: 620px;background-color: burlywood ;border: solid 1px black"></div>    {{-- Fondo del Diagrama --}}
-  </div>
-  <p>
+    </div>
+  <div class='no-print'>
+    <p>
     Double-click in the background to create a new node.
     Create groups by selecting nodes and invoking Ctrl-G; Ctrl-Shift-G to ungroup a selected group.
     A selected node will have four orange triangles that when clicked will automatically copy the node and link to it.
@@ -693,11 +738,20 @@
     Use the context menu to change the color, thickness, dashed-ness, and which side the link should connect with.
     Press the F2 key to start editing the label of a selected link.
   </p>
-  <textarea style="visibility: hidden" id="mySavedModel" style="width:100%;height:300px">
+  </div>
+  <div class='no-print'>
+    <textarea style="visibility: hidden" id="mySavedModel" style="width:100%;height:300px">
       {{ $var }}
-  
   </textarea>
-<p class="text-xs">GoJS version 2.2.17. Copyright 1998-2022 by Northwoods Software.</p></div>
-    <p><a href="https://github.com/NorthwoodsSoftware/GoJS/blob/master/samples/blockEditor.html" target="_blank">View this sample page's source on GitHub</a></p></div>
+  </div>
+  
+  <div class='no-print'>
+    <p class="text-xs">GoJS version 2.2.17. Copyright 1998-2022 by Northwoods Software.</p>
+  </div>
+  </div>
+  <div class='no-print'>
+    <p><a href="https://github.com/NorthwoodsSoftware/GoJS/blob/master/samples/blockEditor.html" target="_blank">View this sample page's source on GitHub</a></p>
+  </div>
+  </div>
   </body>
   </html>

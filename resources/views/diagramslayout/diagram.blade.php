@@ -1,397 +1,184 @@
 <!DOCTYPE html>
-<html lang="en">
-<!--<link rel="stylesheet" href={{ asset("/public/dlayouthcss/diagram.css") }}>-->
-<!--console.log('MOVER');-->
-
+<html>
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover"/>
-<meta name="description" content="Drag a link to reconnect it. Nodes have custom Adornments for selection, resizing, and rotating.  The Palette includes links."/> 
-
-<link rel="stylesheet" href="{{ asset('site/assets/css/style.css')}}"/> 
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Minimal GoJS Sample Generating PDF</title>
+<meta name="description" content="A simple demonstration of generating a PDF file in the browser, showing it in the page, and downloading it as a file." />
 <!-- Copyright 1998-2022 by Northwoods Software Corporation. -->
-<title>My Diagram</title>
-<script src="https://cdn.socket.io/4.5.3/socket.io.min.js" integrity="sha384-WPFUvHkB1aHA5TDSZi6xtDgkF0wXJcIIxXhC6h8OT8EH3fC5PWro5pWJ1THjcfEi" crossorigin="anonymous"></script>
-<script type="importmap">
-    {
-      "imports": {
-        "socket.io-client": "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"
-      }
-    }
-  </script>
-  <script type="module">
-    import { io } from "socket.io-client";
+<meta charset="UTF-8">
+<script src="https://unpkg.com/gojs"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+<script id="code">
+  // This just creates and initializes a Diagram.
+  // The details do not really matter for this demo.
+  function init() {
+    var $ = go.GraphObject.make;
 
+    myDiagram =
+      $(go.Diagram, "myDiagramDiv",
+        {
+          "undoManager.isEnabled": true,
+          "grid.visible": true
+        });
+
+    myDiagram.nodeTemplate =
+      $(go.Node, "Auto",
+        $(go.Shape, "RoundedRectangle",
+          { strokeWidth: 0, fill: "white" },
+          new go.Binding("fill", "color")),
+        $(go.TextBlock,
+          { margin: 8 },
+          new go.Binding("text", "key"))
+      );
+
+    myDiagram.model = new go.GraphLinksModel(
+    [
+      { key: "Alpha", color: "lightblue" },
+      { key: "Beta", color: "orange" },
+      { key: "Gamma", color: "lightgreen" },
+      { key: "Delta", color: "pink" }
+    ],
+    [
+      { from: "Alpha", to: "Beta" },
+      { from: "Alpha", to: "Gamma" },
+      { from: "Beta", to: "Beta" },
+      { from: "Gamma", to: "Delta" },
+      { from: "Delta", to: "Alpha" }
+    ]);
+  }
+
+
+  // This common function is called both when showing the PDF in an iframe and when downloading a PDF file.
+  // The options include:
+  //   "pageSize", either "A4" or "LETTER" (the default)
+  //   "layout", either "portrait" (the default) or "landscape"
+  //   "margin" for the uniform page margin on each page (default is 36 pt)
+  //   "padding" instead of the Diagram.padding when adjusting the Diagram.documentBounds for the area to render
+  //   "imgWidth", size of diagram image for one page; defaults to the page width minus margins
+  //   "imgHeight", size of diagram image for one page; defaults to the page height minus margins
+  //   "imgResolutionFactor" for how large the image should be scaled when rendered for each page;
+  //     larger is better but significantly increases memory usage (default is 3)
+  //   "parts", "background", "showTemporary", "showGrid", all are passed to Diagram.makeImageData
+  function generatePdf(action, diagram, options) {
+    if (!(diagram instanceof go.Diagram)) throw new Error("no Diagram provided when calling generatePdf");
+    if (!options) options = {};
+
+    var pageSize = options.pageSize || "LETTER";
+    pageSize = pageSize.toUpperCase();
+    if (pageSize !== "LETTER" && pageSize !== "A4") throw new Error("unknown page size: " + pageSize);
+    // LETTER: 612x792 pt == 816x1056 CSS units
+    // A4: 595.28x841.89 pt == 793.71x1122.52 CSS units
+    var pageWidth = (pageSize === "LETTER" ? 612 : 595.28) * 96 / 72;  // convert from pt to CSS units
+    var pageHeight = (pageSize === "LETTER" ? 792 : 841.89) * 96 / 72;
+
+    var layout = options.layout || "portrait";
+    layout = layout.toLowerCase();
+    if (layout !== "portrait" && layout !== "landscape") throw new Error("unknown layout: " + layout);
+    if (layout === "landscape") {
+      var temp = pageWidth;
+      pageWidth = pageHeight;
+      pageHeight = temp;
+    }
+
+    var margin = options.margin !== undefined ? options.margin : 36;  // pt: 0.5 inch margin on each side
+    var padding = options.padding !== undefined ? options.padding : diagram.padding;  // CSS units
+
+    var imgWidth = options.imgWidth !== undefined ? options.imgWidth : (pageWidth-margin/72*96*2);  // CSS units
+    var imgHeight = options.imgHeight !== undefined ? options.imgHeight : (pageHeight-margin/72*96*2);  // CSS units
+    var imgResolutionFactor = options.imgResolutionFactor !== undefined ? options.imgResolutionFactor : 3;
+
+    var pageOptions = {
+      size: pageSize,
+      margin: margin,  // pt
+      layout: layout
+    };
+
+    require(["blob-stream.js", "pdfkit.js"], (blobStream, PDFDocument) => {
+      var doc = new PDFDocument(pageOptions);
+      var stream = doc.pipe(blobStream());
+      var bnds = diagram.documentBounds;
+
+      // add some descriptive text
+      //doc.text(diagram.nodes.count + " nodes, " + diagram.links.count + " links  Diagram size: " + bnds.width.toFixed(2) + " x " + bnds.height.toFixed(2));
+
+      var db = diagram.documentBounds.copy().subtractMargin(diagram.padding).addMargin(padding);
+      var p = db.position;
+      // iterate over page areas of document bounds
+      for (var j = 0; j < db.height; j += imgHeight) {
+        for (var i = 0; i < db.width; i += imgWidth) {
+
+          // if any page has no Parts partially or fully in it, skip rendering that page
+          var r = new go.Rect(p.x + i, p.y + j, imgWidth, imgHeight);
+          if (diagram.findPartsIn(r, true, false).count === 0) continue;
+
+          if (i > 0 || j > 0) doc.addPage(pageOptions);
+
+          var makeOptions = {};
+          if (options.parts !== undefined) makeOptions.parts = options.parts;
+          if (options.background !== undefined) makeOptions.background = options.background;
+          if (options.showTemporary !== undefined) makeOptions.showTemporary = options.showTemporary;
+          if (options.showGrid !== undefined) makeOptions.showGrid = options.showGrid;
+          makeOptions.scale = imgResolutionFactor;
+          makeOptions.position = new go.Point(p.x + i, p.y + j);
+          makeOptions.size = new go.Size(imgWidth*imgResolutionFactor, imgHeight*imgResolutionFactor);
+          makeOptions.maxSize = new go.Size(Infinity, Infinity);
+
+          var imgdata = diagram.makeImageData(makeOptions);
+          doc.image(imgdata, { scale: 1/(imgResolutionFactor*96/72) });
+        }
+      }
+
+      doc.end();
+      stream.on('finish', () => action(stream.toBlob('application/pdf')));
+    });
+  }
+
+
+  // Two different uses of generatePdf: one shows the PDF document in the page,
+  // the other downloads it as a file and the user specifies where to save it.
+
+  var pdfOptions =  // shared by both ways of generating PDF
+    {
+      showTemporary: true,     // default is false
+      // layout: "landscape",  // instead of "portrait"
+      // pageSize: "A4"        // instead of "LETTER"
+    };
+
+  function showPdf() {
+    generatePdf(blob => {
+      var datauri = window.URL.createObjectURL(blob);
+      var frame = document.getElementById("myFrame");
+      if (frame) {
+        frame.style.display = "block";
+        frame.src = datauri;  // doesn't work in IE 11, but works everywhere else
+        setTimeout(() => window.URL.revokeObjectURL(datauri), 1);
+      }
+    }, myDiagram, pdfOptions);
+  }
+
+  function downloadPdf() {
+    generatePdf(blob => {
+      var datauri = window.URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.style = "display: none";
+      a.href = datauri;
+      a.download = "myDiagram.pdf";
+
+      document.body.appendChild(a);
+      requestAnimationFrame(() => {
+        a.click();
+        window.URL.revokeObjectURL(datauri);
+        document.body.removeChild(a);
+      });
+    }, myDiagram, pdfOptions);
+  }
 </script>
 </head>
-
-<body bgcolor="#ffe4c4">
-    
-  <!-- This top nav is not part of the sample code -->
-  <nav id="navTop" class="w-full z-30 top-0 text-white bg-nwoods-primary">
-    <div class="w-full container max-w-screen-lg mx-auto flex flex-wrap sm:flex-nowrap items-center justify-between mt-0 py-2">
-      <div class="md:pl-4">
-        <a class="text-white hover:text-white no-underline hover:no-underline
-        font-bold text-2xl lg:text-4xl rounded-lg hover:bg-nwoods-secondary " href="../">
-          <h1 class="mb-0 p-1 ">My Diagram</h1>
-        </a>
-      </div>
-      <!--
-      <button id="topnavButton" class="rounded-lg sm:hidden focus:outline-none focus:ring" aria-label="Navigation">
-        <svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
-          <path id="topnavOpen" fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM9 15a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1z" clip-rule="evenodd"></path>
-          <path id="topnavClosed" class="hidden" fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-        </svg>
-      </button>
-    -->
-      <!--
-      <div id="topnavList" class="hidden sm:block items-center w-auto mt-0 text-white p-0 z-20">
-        <ul class="list-reset list-none font-semibold flex justify-end flex-wrap sm:flex-nowrap items-center px-0 pb-0">
-          <li class="p-1 sm:p-0"><a class="topnav-link" href="../learn/">Learn</a></li>
-          <li class="p-1 sm:p-0"><a class="topnav-link" href="../samples/">Samples</a></li>
-          <li class="p-1 sm:p-0"><a class="topnav-link" href="../intro/">Intro</a></li>
-          <li class="p-1 sm:p-0"><a class="topnav-link" href="../api/">API</a></li>
-          <li class="p-1 sm:p-0"><a class="topnav-link" href="https://www.nwoods.com/products/register.html">Register</a></li>
-          <li class="p-1 sm:p-0"><a class="topnav-link" href="../download.html">Download</a></li>
-          <li class="p-1 sm:p-0"><a class="topnav-link" href="https://forum.nwoods.com/c/gojs/11">Forum</a></li>
-          <li class="p-1 sm:p-0"><a class="topnav-link" href="https://www.nwoods.com/contact.html"
-           target="_blank" rel="noopener" onclick="getOutboundLink('https://www.nwoods.com/contact.html', 'contact');">Contact</a></li>
-          <li class="p-1 sm:p-0"><a class="topnav-link" href="https://www.nwoods.com/sales/index.html"
-           target="_blank" rel="noopener" onclick="getOutboundLink('https://www.nwoods.com/sales/index.html', 'buy');">Buy</a></li>
-        </ul>
-      </div>
-    -->
-    </div>
-    <hr class="border-b border-gray-600 opacity-50 my-0 py-0" />
-  </nav>
-  <div class="md:flex flex-col md:flex-row md:min-h-screen w-full max-w-screen-xl mx-auto">
-    <div id="navSide" class="flex flex-col w-full md:w-48 text-gray-700 bg-white flex-shrink-0"></div>
-    <!-- * * * * * * * * * * * * * -->
-    <!-- Start of GoJS sample code -->
-    
-    <script src="https://unpkg.com/gojs@2.2.17/release/go.js"></script>
-    <div id="allSampleContent" class="p-4 w-full">
-  <script src="https://unpkg.com/gojs@2.2.17/extensions/Figures.js"></script>
-    <script id="code">
-    function init() {
-
-      // Since 2.2 you can also author concise templates with method chaining instead of GraphObject.make
-      // For details, see https://gojs.net/latest/intro/buildingObjects.html
-      const $ = go.GraphObject.make;  // for conciseness in defining templates
-      myDiagram =
-        $(go.Diagram, "myDiagramDiv",  // must name or refer to the DIV HTML element
-          {
-            grid: $(go.Panel, "Grid",
-              $(go.Shape, "LineH", { stroke: "lightgray", strokeWidth: 0.5 }),
-              $(go.Shape, "LineH", { stroke: "gray", strokeWidth: 0.5, interval: 10 }),
-              $(go.Shape, "LineV", { stroke: "lightgray", strokeWidth: 0.5 }),
-              $(go.Shape, "LineV", { stroke: "gray", strokeWidth: 0.5, interval: 10 })
-            ),
-            "draggingTool.dragsLink": true,
-            "draggingTool.isGridSnapEnabled": true,
-            "linkingTool.isUnconnectedLinkValid": true,
-            "linkingTool.portGravity": 20,
-            "relinkingTool.isUnconnectedLinkValid": true,
-            "relinkingTool.portGravity": 20,
-            "relinkingTool.fromHandleArchetype":
-              $(go.Shape, "Diamond", { segmentIndex: 0, cursor: "pointer", desiredSize: new go.Size(8, 8), fill: "tomato", stroke: "darkred" }),
-            "relinkingTool.toHandleArchetype":
-              $(go.Shape, "Diamond", { segmentIndex: -1, cursor: "pointer", desiredSize: new go.Size(8, 8), fill: "darkred", stroke: "tomato" }),
-            "linkReshapingTool.handleArchetype":
-              $(go.Shape, "Diamond", { desiredSize: new go.Size(7, 7), fill: "lightblue", stroke: "deepskyblue" }),
-            "rotatingTool.handleAngle": 270,
-            "rotatingTool.handleDistance": 30,
-            "rotatingTool.snapAngleMultiple": 15,
-            "rotatingTool.snapAngleEpsilon": 15,
-            "undoManager.isEnabled": true
-          });
-
-      // when the document is modified, add a "*" to the title and enable the "Save" button
-      myDiagram.addDiagramListener("Modified", e => {
-        var button = document.getElementById("SaveButton");
-        if (button) button.disabled = !myDiagram.isModified;
-        var idx = document.title.indexOf("*");
-        if (myDiagram.isModified) {
-          if (idx < 0) document.title += "*";
-        } else {
-          if (idx >= 0) document.title = document.title.slice(0, idx);
-        }
-        
-      });
-
-      // Define a function for creating a "port" that is normally transparent.
-      // The "name" is used as the GraphObject.portId, the "spot" is used to control how links connect
-      // and where the port is positioned on the node, and the boolean "output" and "input" arguments
-      // control whether the user can draw links from or to the port.
-      function makePort(name, spot, output, input) {
-        // the port is basically just a small transparent circle
-        return $(go.Shape, "Circle",
-          {
-            fill: null,  // not seen, by default; set to a translucent gray by showSmallPorts, defined below
-            stroke: null,
-            desiredSize: new go.Size(7, 7),
-            alignment: spot,  // align the port on the main Shape
-            alignmentFocus: spot,  // just inside the Shape
-            portId: name,  // declare this object to be a "port"
-            fromSpot: spot, toSpot: spot,  // declare where links may connect at this port
-            fromLinkable: output, toLinkable: input,  // declare whether the user may draw links to/from here
-            cursor: "pointer"  // show a different cursor to indicate potential link point
-          });
-      }
-
-      var nodeSelectionAdornmentTemplate =
-        $(go.Adornment, "Auto",
-          $(go.Shape, { fill: null, stroke: "deepskyblue", strokeWidth: 1.5, strokeDashArray: [4, 2] }), //Contorno de la figura
-          $(go.Placeholder)
-        );
-
-      var nodeResizeAdornmentTemplate =
-        $(go.Adornment, "Spot",
-          { locationSpot: go.Spot.Right },
-          $(go.Placeholder),
-          $(go.Shape, { alignment: go.Spot.TopLeft, cursor: "nw-resize", desiredSize: new go.Size(6, 6), fill: "lightblue", stroke: "deepskyblue" }), //Contornos de cualquier figura
-          $(go.Shape, { alignment: go.Spot.Top, cursor: "n-resize", desiredSize: new go.Size(6, 6), fill: "lightblue", stroke: "deepskyblue" }),
-          $(go.Shape, { alignment: go.Spot.TopRight, cursor: "ne-resize", desiredSize: new go.Size(6, 6), fill: "lightblue", stroke: "deepskyblue" }),
-
-          $(go.Shape, { alignment: go.Spot.Left, cursor: "w-resize", desiredSize: new go.Size(6, 6), fill: "lightblue", stroke: "deepskyblue" }),
-          $(go.Shape, { alignment: go.Spot.Right, cursor: "e-resize", desiredSize: new go.Size(6, 6), fill: "lightblue", stroke: "deepskyblue" }),
-
-          $(go.Shape, { alignment: go.Spot.BottomLeft, cursor: "se-resize", desiredSize: new go.Size(6, 6), fill: "lightblue", stroke: "deepskyblue" }),
-          $(go.Shape, { alignment: go.Spot.Bottom, cursor: "s-resize", desiredSize: new go.Size(6, 6), fill: "lightblue", stroke: "deepskyblue" }),
-          $(go.Shape, { alignment: go.Spot.BottomRight, cursor: "sw-resize", desiredSize: new go.Size(6, 6), fill: "lightblue", stroke: "deepskyblue" })
-        );
-
-      var nodeRotateAdornmentTemplate =
-        $(go.Adornment,
-          { locationSpot: go.Spot.Center, locationObjectName: "ELLIPSE" },
-          $(go.Shape, "Ellipse", { name: "ELLIPSE", cursor: "pointer", desiredSize: new go.Size(7, 7), fill: "lightblue", stroke: "deepskyblue" }),
-          $(go.Shape, { geometryString: "M3.5 7 L3.5 30", isGeometryPositioned: true, stroke: "deepskyblue", strokeWidth: 1.5, strokeDashArray: [4, 2] })
-        );
-
-      myDiagram.nodeTemplate =
-        $(go.Node, "Spot",
-          { locationSpot: go.Spot.Center },
-          new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
-          { selectable: true, selectionAdornmentTemplate: nodeSelectionAdornmentTemplate },
-          { resizable: true, resizeObjectName: "PANEL", resizeAdornmentTemplate: nodeResizeAdornmentTemplate },
-          { rotatable: true, rotateAdornmentTemplate: nodeRotateAdornmentTemplate },
-          new go.Binding("angle").makeTwoWay(),
-          // the main object is a Panel that surrounds a TextBlock with a Shape
-          $(go.Panel, "Auto",
-            { name: "PANEL" },
-            new go.Binding("desiredSize", "size", go.Size.parse).makeTwoWay(go.Size.stringify),
-            $(go.Shape, "Rectangle",  // default figure  //Configuracion por default de las figuras
-              {
-                //name: "SHAPE",  //LO NUEVO
-                portId: "", // the default port: if no spot on link data, use closest side
-                fromLinkable: true, toLinkable: true, cursor: "pointer",
-                fill: "white",  // default color
-                strokeWidth: 2
-              },
-              new go.Binding("figure"),
-              new go.Binding("fill")),
-            $(go.TextBlock,
-              {
-                font: "bold 11pt Helvetica, Arial, sans-serif",
-                margin: 2,
-                maxSize: new go.Size(160, NaN),
-                wrap: go.TextBlock.WrapFit,
-                editable: true
-              },
-              new go.Binding("text").makeTwoWay())
-          ),
-          // four small named ports, one on each side:  //Conexiones de ambos lados de la figura
-          makePort("T", go.Spot.Top, false, true),
-          makePort("L", go.Spot.Left, true, true),
-          makePort("R", go.Spot.Right, true, true),
-          makePort("B", go.Spot.Bottom, true, false),
-          { // handle mouse enter/leave events to show/hide the ports
-            mouseEnter: (e, node) => showSmallPorts(node, true),  //**********************************QUIZAS ACA***************
-            mouseLeave: (e, node) => showSmallPorts(node, false),
-            mouseDrop: (e, node) => showSmallPorts(node, true),
-            mouseDrop: e => {
-                //console.log('MOVER');
-            }
-            //NECESITAMOS PONER EL MOUSEDROP
-          }
-        );
-
-      function showSmallPorts(node, show) {
-        node.ports.each(port => {
-          if (port.portId !== "") {  // don't change the default port, which is the big shape
-            port.fill = show ? "rgba(0,0,0,.3)" : null;
-          }
-        });
-        console.log('MOVER');     //***************************************AQUI PUEDE SER**************************************
-      }
-
-      var linkSelectionAdornmentTemplate =
-        $(go.Adornment, "Link",
-          $(go.Shape,
-            // isPanelMain declares that this Shape shares the Link.geometry
-            { isPanelMain: true, fill: null, stroke: "deepskyblue", strokeWidth: 0 })  // use selection object's strokeWidth
-        );
-
-      myDiagram.linkTemplate =
-        $(go.Link,  // the whole link panel
-          { selectable: true, selectionAdornmentTemplate: linkSelectionAdornmentTemplate },
-          { relinkableFrom: true, relinkableTo: true, reshapable: true },
-          {
-            routing: go.Link.AvoidsNodes,
-            curve: go.Link.JumpOver,
-            corner: 5,
-            toShortLength: 4
-          },
-          new go.Binding("points").makeTwoWay(),
-          $(go.Shape,  // the link path shape   //GROSAR DE LA FLECHA
-            { isPanelMain: true, strokeWidth: 3,
-            strokeDashArray: [4, 2]  }),
-            
-          $(go.Shape,  // the arrowhead         //CABEZA DE LA FLECHA
-            { toArrow: "Standard", stroke: null }),
-          $(go.Panel, "Auto",
-            new go.Binding("visible", "isSelected").ofObject(),
-            $(go.Shape, "RoundedRectangle",  // the link shape
-              { fill: "#F8F8F8", stroke: null },
-              ),
-            $(go.TextBlock,
-              {
-                textAlign: "center",
-                font: "10pt helvetica, arial, sans-serif",
-                stroke: "#919191",
-                margin: 2,
-                minSize: new go.Size(10, NaN),
-                editable: true
-              },
-              new go.Binding("text").makeTwoWay())
-          )
-        );
-
-      load();  // load an initial diagram from some JSON text
-
-      // initialize the Palette that is on the left side of the page
-      myPalette =
-        $(go.Palette, "myPaletteDiv",  // must name or refer to the DIV HTML element
-          {
-            maxSelectionCount: 1,
-            nodeTemplateMap: myDiagram.nodeTemplateMap,  // share the templates used by myDiagram
-            linkTemplate: // simplify the link template, just in this Palette
-              $(go.Link,
-                { // because the GridLayout.alignment is Location and the nodes have locationSpot == Spot.Center,
-                  // to line up the Link in the same manner we have to pretend the Link has the same location spot
-                  locationSpot: go.Spot.Center,
-                  selectionAdornmentTemplate:
-                    $(go.Adornment, "Link",
-                      { locationSpot: go.Spot.Center },
-                      $(go.Shape,
-                        { isPanelMain: true, fill: null, stroke: "deepskyblue", strokeWidth: 0 }),
-                      $(go.Shape,  // the arrowhead
-                        { toArrow: "Standard", stroke: null })
-                    )
-                },
-                {
-                  routing: go.Link.AvoidsNodes,
-                  curve: go.Link.JumpOver,
-                  corner: 5,
-                  toShortLength: 4
-                },
-                new go.Binding("points"),
-                $(go.Shape,  // the link path shape
-                  { isPanelMain: true, strokeWidth: 2 }),
-                $(go.Shape,  // the arrowhead
-                  { toArrow: "Standard", stroke: null })
-              ),
-            model: new go.GraphLinksModel([  // specify the contents of the Palette
-              { text: "Container" ,figure: "Rectangle", "size":"75 80", fill: "transparent", strokeWidth: 3,
-            strokeDashArray: [4, 2]  },
-              { text: "Component" ,figure: "Rectangle", "size":"75 80", fill: "blue"},
-              { text: "DataBase", figure: "MagneticData","size":"75 80", fill: "lightgray" },
-              { text: "Software System", figure: "InternalStorage", "size":"75 75", fill: "lightskyblue" },
-              { text: "Web browser", figure: "CreateRequest", "size":"75 75", fill: "lightskyblue" },
-              { text: "Mobile app", figure: "Procedure", "size":"75 75", fill: "#CE0620" },
-              { text: "Class", figure: "Class","size":"75 75", fill: "white" },
-              { text: "User", figure: "BpmnTaskUser","size":"75 75", fill: "blue" }
-            ], [
-                // the Palette also has a disconnected Link, which the user can drag-and-drop
-                { points: new go.List(/*go.Point*/).addAll([new go.Point(0, 0), new go.Point(30, 0), new go.Point(30, 40), new go.Point(60, 40)]) }
-              ])
-          });
-    }
-
-
-  // Show the diagram's model in JSON format that the user may edit
-  function save() {
-    saveDiagramProperties();  // do this first, before writing to JSON
-    document.getElementById("mySavedModel").value = myDiagram.model.toJson();
-    Livewire.emit('GuardarDiagrama', myDiagram.model.toJson());
-    myDiagram.isModified = false;
-  }
-  function load() {
-    myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
-    loadDiagramProperties();  // do this after the Model.modelData has been brought into memory
-  }
-
-  function saveDiagramProperties() {
-    myDiagram.model.modelData.position = go.Point.stringify(myDiagram.position);
-  }
-  function loadDiagramProperties(e) {
-    // set Diagram.initialPosition, not Diagram.position, to handle initialization side-effects
-    var pos = myDiagram.model.modelData.position;
-    if (pos) myDiagram.initialPosition = go.Point.parse(pos);
-  }
-  window.addEventListener('DOMContentLoaded', init);
-  </script>
-
+<body onload="init()">
 <div id="sample">
-  <div style="width: 100%; display: flex; justify-content: space-between">
-    <div id="myPaletteDiv" style="width: 120px; margin-right: 2px; background-color: aquamarine; border: solid 1px black"></div>
-    <div id="myDiagramDiv" style="flex-grow: 1; height: 620px;background-color: burlywood ;border: solid 1px black"></div>
-  </div>
-  <p>
-    This sample demonstrates the ability for the user to drag around a Link as if it were a Node.
-    When either end of the link passes over a valid port, the port is highlighted.
-  </p>
-  <p>
-    The link-dragging functionality is enabled by setting some or all of the following properties:
-    <a>DraggingTool.dragsLink</a>, <a>LinkingTool.isUnconnectedLinkValid</a>, and
-    <a>RelinkingTool.isUnconnectedLinkValid</a>.
-  </p>
-  <p>
-    Note that a Link is present in the <a>Palette</a> so that it too can be dragged out and onto
-    the main Diagram.  Because links are not automatically routed when either end is not connected
-    with a Node, the route is provided explicitly when that Palette item is defined.
-  </p>
-  <p>
-    This also demonstrates several custom Adornments:
-    <a>Part.selectionAdornmentTemplate</a>, <a>Part.resizeAdornmentTemplate</a>, and
-    <a>Part.rotateAdornmentTemplate</a>.
-  </p>
-  <p>
-    Finally this sample demonstrates saving and restoring the <a>Diagram.position</a> as a property
-    on the <a>Model.modelData</a> object that is automatically saved and restored when calling <a>Model.toJson</a>
-    and <a>Model,fromJson</a>.
-  </p>
-  <div>
-    <div>
-      <button id="SaveButton" onclick="save()">Save</button>
-      <button onclick="load()">Load</button>
-      Diagram Model saved in JSON format:
-    </div>
-    <textarea id="mySavedModel" style="width:100%;height:300px">
-{ "class": "go.GraphLinksModel",
-  "linkFromPortIdProperty": "fromPort",
-  "linkToPortIdProperty": "toPort",
-  "nodeDataArray": [
- ],
-  "linkDataArray": [
- ]}
-    </textarea>
-  </div>
+  <div id="myDiagramDiv" style="border: solid 1px black; width:400px; height:400px"></div>
+  <div><button onclick="showPdf()">Show PDF</button> <button onclick="downloadPdf()">Download PDF</button></div>
+  <iframe id="myFrame" style="display:none; width:1000px; height:1000px"></iframe>
 </div>
-    </div>
-    <!-- * * * * * * * * * * * * * -->
-    <!--  End of GoJS sample code  -->
-  </div>
 </body>
-
 </html>

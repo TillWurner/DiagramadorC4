@@ -27,6 +27,7 @@ class DiagramController extends Controller
         /* $idAuth = $id; */
         $diagramas = Diagramas::all(); 
         //return view('diagrams.diagrams2');
+        /* return view('diagramslayout.diagram', compact('diagramas','idAuth','exist')); */
         return view('diagrams.diagrams', compact('diagramas','idAuth','exist'));
     }
     public function store(Request $request){
@@ -69,10 +70,13 @@ class DiagramController extends Controller
     public function diag($id){
 
         /* $diagram = Diagramas::findOrFail($id) */;
+        $user = Auth()->user()->id;
         $diagramas = Diagramas::findOrFail($id);
+        $autor = $diagramas->id_user;
+        $codigo = $diagramas->code;
         $diagramas->json;
         $var = $diagramas->json;
-        return view('diagramslayout\diagramgen', compact('id','var'));
+        return view('diagramslayout\diagramgen', compact('id','var','user','autor','codigo'));
     }
     public function sharediag(Request $request){
         $inv = $request->input('code');
