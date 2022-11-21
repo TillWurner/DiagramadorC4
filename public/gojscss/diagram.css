@@ -8,7 +8,13 @@
     }
 }
 body{
-    background-color: #ffe4c4;
+   /*  background-color: #ffe4c4; */
+    position: relative;
+	height: 100%;
+	width: 100%;
+    background-size: 100% 100%;
+	background-position: center;
+    background-image: url('img/f4.jpg');
 }
 .titlenav{
     color: black;

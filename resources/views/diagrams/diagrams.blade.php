@@ -45,7 +45,7 @@ $bandera = false;
                   <form action="{{ route('delete', $diagram->id) }}" method="POST">
                       {{csrf_field()}}
                       {{  method_field('DELETE')}}
-                      <a href={{route('diag', $diagram->id)}} class="btn btn-link"><ion-icon name="trash-outline"></ion-icon></a>
+                      <a href={{route('diag', $diagram->id)}} class="btn btn-link"><ion-icon name="enter-outline"></ion-icon></a>
                       <button type="submit" class="btn btn-link"><ion-icon name="trash-outline"></ion-icon></button>
                       {{-- <button type="submit"><ion-icon name="trash-outline"></ion-icon></button> --}} {{-- Boton bonito --}}
                   </form>

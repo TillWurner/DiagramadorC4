@@ -43,14 +43,14 @@ $bandera = false;
               <td>{{$diagram->diagu->name}}</td>  {{-- Ocupo la relacion para sacar el atributo de otra tabla --}}
               <td>{{$diagram->code}}</td>
               <td>
-                  <form action="{{ route('delete', $diagram->id) }}" method="POST">
+                <a href={{route('diag', $diagram->id)}} class="btn btn-link"><ion-icon name="enter-outline"></ion-icon></a>
+                  {{-- <form action="{{ route('delete', $diagram->id) }}" method="POST">
                       {{csrf_field()}}
                       {{  method_field('DELETE')}}
-                      <a href={{route('diag', $diagram->id)}} class="btn btn-link"><ion-icon name="trash-outline"></ion-icon></a>
-                      <button type="submit" class="btn btn-link"><ion-icon name="trash-outline"></ion-icon></button>
+                      
+                      <button type="submit" class="btn btn-link"><ion-icon name="trash-outline"></ion-icon></button> --}}
                       {{-- <button type="submit"><ion-icon name="trash-outline"></ion-icon></button> --}} {{-- Boton bonito --}}
-                  </form>
-                  
+                {{--   </form>--}}
               </td>
             </tr>
             @endif

@@ -106,9 +106,14 @@ class DiagramController extends Controller
         ]); */
 
          $diagramas->save();
-        /* return $request->input('json'); */
-        /* return $request->input('json'); */
-        return redirect()->route('mydiagrams');
+         /*Redirect */
+        $user = Auth()->user()->id;
+        $autor = $diagramas->id_user;
+        $codigo = $diagramas->code;
+        $diagramas->json;
+        $var = $diagramas->json;
+        return view('diagramslayout\diagramgen', compact('id','var','user','autor','codigo'));
+       /*  return redirect()->route('mydiagrams'); */
 
         /*  $diagram=Diagramas::findOrFail($id);
         $auth = $diagram -> id_user;
