@@ -1,0 +1,16 @@
+{ "class": "GraphLinksModel",
+  "nodeDataArray": [
+{"text":"UnbanEnMarzo\n","figure":"Rectangle","size":"75 80","fill":"blue","key":-2,"loc":"-230 -130"},
+{"text":"Hola Rey","figure":"MagneticData","size":"75 80","fill":"lightgray","key":-3,"loc":"160 -110"},
+{"text":"Mi Casa Ga","figure":"InternalStorage","size":"75 75","fill":"lightskyblue","key":-4,"loc":"0 80"},
+{"text":"Component","figure":"Rectangle","size":"75 80","fill":"blue","key":-5,"loc":"-40 -220"},
+{"text":"Guishe","figure":"MagneticData","size":"75 80","fill":"lightgray","key":-6,"loc":"330 -230"},
+{"text":"Nada vos?","figure":"Rectangle","size":"75 80","fill":"transparent","strokeWidth":3,"strokeDashArray":[4,2],"key":-1,"loc":"-170 -320"},
+{"text":"Pruebita","figure":"Procedure","size":"75 75","fill":"#CE0620","key":-7,"loc":"30 -330"}
+],
+  "linkDataArray": [
+{"from":-2,"to":-4,"points":[-230,-90,-230,-80,-230,80,-138.75,80,-47.5,80,-37.5,80]},
+{"from":-2,"to":-3,"points":[-192.5,-130,-182.5,-130,-35,-130,-35,-110,112.5,-110,122.5,-110]},
+{"from":-6,"to":-5,"points":[292.5,-230,282.5,-230,145,-230,145,-220,7.5,-220,-2.5,-220],"dash":[4,4]},
+{"from":-1,"to":-5,"points":[-170,-280,-170,-270,-170,-220,-128.75,-220,-87.5,-220,-77.5,-220]}
+]}

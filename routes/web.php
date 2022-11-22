@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ContactusController;
 use App\Http\Controllers\DiagramController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\JsonController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 
@@ -37,4 +38,5 @@ Route::get('/shdiagram',[DiagramController::class,'shdiagrams'])->name('shdiagra
 Route::post('/shdiagram',[DiagramController::class, 'sharediag'])->name('diagram.share');
 Route::post('/diag/{id}',[DiagramController::class, 'savediag'])->name('diagram.savediag');     /* Meter el JSON */
 Route::get('/diag/{id}',[DiagramController::class,'diag'])->name('diag');
+Route::get('/download', [JsonController::class,'download'])->name('export.json');
 /* Route::get('/diag/{id}',[DiagramController::class,'loaddiag'])->name('load'); */
