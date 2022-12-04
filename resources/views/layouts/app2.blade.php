@@ -39,10 +39,10 @@
                     </form>
                 </li>
                    <div class="icons">
-                      <a href="#"><i class="fab fa-facebook-f"></i></a>
-                      <a href="#"><i class="fab fa-twitter"></i></a>
-                      <a href="#"><i class="fab fa-github"></i></a>
-                      <a href="#"><i class="fab fa-youtube"></i></a>
+                     <a href="https://www.facebook.com/josegonzalesm/"><i class="fab fa-facebook-f"></i></a>
+                     <a href="https://www.instagram.com/josegmont_/"><i class="fab fa-instagram"></i></a>
+                     <a href="https://github.com/TillWurner"><i class="fab fa-github"></i></a>
+                     <a href="https://wa.me/59169180490"><i class="fab fa-whatsapp"></i></a>
                    </div>
                 </ul>
              </nav>

@@ -25,8 +25,8 @@
                 {{-- </form> --}}
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="submit" class="btn btn-info ">
+                <button id="cerrar" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button id="guardar" type="submit" class="btn btn-info ">
                   {{ __('Guardar') }}
               </button>
               </div>

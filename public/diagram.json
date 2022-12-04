@@ -1,7 +1,6 @@
 { "class": "GraphLinksModel",
   "nodeDataArray": [
-{"text":"Ya no puedo mas :c","figure":"Rectangle","size":"100 120","fill":"blue","key":-2,"loc":"-70 -30"},
-{"text":"Jose","figure":"BpmnTaskUser","size":"75 75","fill":"blue","key":-8,"loc":"10 -240"},
-{"text":"GG","figure":"MagneticData","size":"75 80","fill":"lightgray","key":-3,"loc":"-130 -260"}
+{"text":"DataBase","figure":"MagneticData","size":"75 80","fill":"lightgray","key":-3,"loc":"-240 -60"},
+{"text":"Component","figure":"Rectangle","size":"75 80","fill":"blue","key":-2,"loc":"-460 -170"}
 ],
-  "linkDataArray": [{"from":-3,"to":-2,"points":[-130,-220,-130,-210,-130,-155,-70,-155,-70,-100,-70,-90]}]}
+  "linkDataArray": []}

@@ -57,7 +57,7 @@
         <button class="btn btn-secondary" onclick="pdf()">Exportar PDF</button>
         <button class="btn btn-secondary" onclick="makeBlob()">Exportar Jpg</button>
         <button class="btn btn-secondary" onclick="imprimir()">Imprimir</button>
-        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModalCenter">Compartir Diagrama</button>
+        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModalCenter">Invitar Colaboradores</button>
         @if ($user == $autor)
         <form method="GET" action="{{ route('export.json') }}">
           {{method_field('GET')}}
@@ -80,7 +80,7 @@
               echo "<script>console.log({$var})</script>";
               $json = json_encode($file); //No se ocupa
               $file_name = 'diagram.json';
-              file_put_contents($file_name, $file); //OCUPAR LA VAR QUE VIENE DEL CONTROLADOR file_put_contents($file_name, $var);
+              file_put_contents($file_name, $var); //OCUPAR LA VAR QUE VIENE DEL CONTROLADOR file_put_contents($file_name, $var);
               /* echo "<script>console.log({$json})</script>"; 
               header('Cache-control: private');
               header('Content-Type: application/octet-stream'); 
@@ -826,6 +826,7 @@
   <div class='no-print'>
     <p><a href="https://github.com/NorthwoodsSoftware/GoJS/blob/master/samples/blockEditor.html" target="_blank">View this sample page's source on GitHub</a></p>
   </div>
+  <script src='/diagra'></script>
   </div>
   </body>
   </html>
