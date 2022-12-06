@@ -1,6 +1,0 @@
-{ "class": "GraphLinksModel",
-  "nodeDataArray": [
-{"text":"DataBase","figure":"MagneticData","size":"75 80","fill":"lightgray","key":-3,"loc":"-240 -60"},
-{"text":"Component","figure":"Rectangle","size":"75 80","fill":"blue","key":-2,"loc":"-460 -170"}
-],
-  "linkDataArray": []}
