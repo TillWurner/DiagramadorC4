@@ -71,7 +71,7 @@
         <?php 
         /* $db=connection_pgsql() or die('Sin conexion a la bd'); */
             //No es necesario hacer la conexion a la bd, igual funciona ocupar la variable que viene del controlador
-            /*   $db = new PDO("pgsql:host=127.0.0.1;port=5432;dbname=diagramador;user=postgres;password=zeinaldo123");
+              $db = new PDO("pgsql:host=127.0.0.1;port=5432;dbname=diagramador;user=postgres;password=zeinaldo123");
               $query = "SELECT * FROM public.diagramas where id = $id ";
               $result = $db->prepare($query);
               $results = $result->execute();
@@ -81,7 +81,7 @@
               $json = json_encode($file); //No se ocupa
               $file_name = 'diagram.json';
               file_put_contents($file_name, $var); //OCUPAR LA VAR QUE VIENE DEL CONTROLADOR file_put_contents($file_name, $var);
-               *//* echo "<script>console.log({$json})</script>"; 
+              /* echo "<script>console.log({$json})</script>"; 
               header('Cache-control: private');
               header('Content-Type: application/octet-stream'); 
               header('Content-Length: '.strlen($json));
