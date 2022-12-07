@@ -8,7 +8,7 @@
       <link rel="stylesheet" href="{{ asset("/homecss/home.css") }}">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
    </head>
-   <body>
+   <body style="background-image: url({{asset('/logincss/img/banner1.jpg')}})">
       <div class="background">
           <div class="wrapper">
              <input type="checkbox" id="btn" hidden>
