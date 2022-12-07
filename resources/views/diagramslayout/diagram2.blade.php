@@ -79,8 +79,8 @@
               $file = $row['json'];
               echo "<script>console.log({$var})</script>";
               $json = json_encode($file); */ //No se ocupa //Hasta ACA COMENTAR  
-              $file_name = 'diagram.json';
-              file_put_contents($file_name, $var);  //OCUPAR LA VAR QUE VIENE DEL CONTROLADOR file_put_contents($file_name, $var);
+              /* $file_name = 'diagram.json';
+              file_put_contents($file_name, $var);  */ //OCUPAR LA VAR QUE VIENE DEL CONTROLADOR file_put_contents($file_name, $var);
               /* echo "<script>console.log({$json})</script>"; 
               header('Cache-control: private');
               header('Content-Type: application/octet-stream'); 
@@ -156,7 +156,7 @@
   <script src="https://unpkg.com/gojs@2.2.17/extensions/DrawCommandHandler.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
     <script id="code" type="text/javascript">
-      const socket = io("http://54.85.123.78/", {
+      const socket = io("http://107.20.38.90:3000/", {
             transports: ["websocket"]
         });
         const sala = <?php echo $id ?> 
