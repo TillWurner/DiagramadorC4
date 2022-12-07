@@ -8,7 +8,7 @@
       <link rel="stylesheet" href={{ asset("/sidebarcss/contactus.css") }}>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
    </head>
-   <body>
+   <body style="background-image: url({{asset('/sidebarcss/img/banner8.jpg')}})">
       <div class="background">
           <div class="wrapper">
              <input type="checkbox" id="btn" hidden>

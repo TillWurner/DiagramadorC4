@@ -1,6 +1,9 @@
 @include('layouts.plantillabase')
 <link rel="stylesheet" href={{ asset('diagramcss/mydiagram.css') }}>   <!-- PARA USAR 2 PLANTILLAS CSS-->
 <link rel="stylesheet" href={{asset("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css")}} integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<body style="background-image: url({{asset('/logincss/img/banner7.jpg')}})">
+  
+</body>
 <div class="title2">
     <h1>My Diagrams</h1>
     {{-- <button href= exampleModal >Crear Nuevo</button> --}}
