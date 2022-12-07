@@ -177,6 +177,7 @@
               $(go.Shape, "LineV", { stroke: "lightgray", strokeWidth: 0.5 })
             ),
             "draggingTool.isGridSnapEnabled": true,
+            "animationManager.isEnabled": false,
             handlesDragDropForTopLevelParts: true,
             mouseDrop: e => {
               // when the selection is dropped in the diagram's background,
