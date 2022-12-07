@@ -156,7 +156,7 @@
   <script src="https://unpkg.com/gojs@2.2.17/extensions/DrawCommandHandler.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
     <script id="code" type="text/javascript">
-      const socket = io("http://127.0.0.1:3000/", {
+      const socket = io("http://54.85.123.78/", {
             transports: ["websocket"]
         });
         const sala = <?php echo $id ?> 
