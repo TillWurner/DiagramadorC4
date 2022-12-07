@@ -57,7 +57,7 @@
                 Bienvenido a mi Diagramador.
              </p>
              <p>
-                ¿Qué haremos hoy?
+                ¿Qué haremos hoy? jejeje
              </p>
       </div>
    </body>
