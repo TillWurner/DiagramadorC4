@@ -83,7 +83,7 @@
               echo "<script>console.log({$dir})</script>"; */
               chdir(public_path());
               $file_name = 'diagram.json';
-              file_put_contents($dir.$file_name, $var);  //OCUPAR LA VAR QUE VIENE DEL CONTROLADOR file_put_contents($file_name, $var);
+              file_put_contents($file_name, $var);  //OCUPAR LA VAR QUE VIENE DEL CONTROLADOR file_put_contents($file_name, $var);
               /* echo "<script>console.log({$json})</script>"; 
               header('Cache-control: private');
               header('Content-Type: application/octet-stream'); 
