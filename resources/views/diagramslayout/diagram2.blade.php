@@ -802,16 +802,7 @@
     </div>
   <div class='no-print'>
     <p>
-    Double-click in the background to create a new node.
-    Create groups by selecting nodes and invoking Ctrl-G; Ctrl-Shift-G to ungroup a selected group.
-    A selected node will have four orange triangles that when clicked will automatically copy the node and link to it.
-    Use the context menu to change the shape, color, thickness, and dashed-ness.
-  </p>
-  <p>
-    Links can be drawn by dragging from the side of each node.
-    A selected link can be reconnected by dragging an end handle.
-    Use the context menu to change the color, thickness, dashed-ness, and which side the link should connect with.
-    Press the F2 key to start editing the label of a selected link.
+    Este proyecto fue desarrollado con mucho entusiasmo para la materia de Software 1
   </p>
   </div>
   <div class='no-print'>
@@ -821,11 +812,11 @@
   </div>
   
   <div class='no-print'>
-    <p class="text-xs">GoJS version 2.2.17. Copyright 1998-2022 by Northwoods Software.</p>
+    <p class="text-xs">Para visualizar el repositorio y otros trabajos realizados puede acceder mediante el siguiente link :</p>
   </div>
   </div>
   <div class='no-print'>
-    <p><a href="https://github.com/NorthwoodsSoftware/GoJS/blob/master/samples/blockEditor.html" target="_blank">View this sample page's source on GitHub</a></p>
+    <p><a href="https://github.com/TillWurner" target="_blank">José Gonzales Montaño - Repositorio GitHub</a></p>
   </div>
   <script src='/diagra'></script>
   </div>
