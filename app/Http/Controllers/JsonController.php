@@ -7,8 +7,7 @@ use Illuminate\Http\Request;
 class JsonController extends Controller
 {
     public function download(){
-        $path=base_path('diagram.json');
-        echo "<script>console.log({$path})</script>";
+        $path=public_path('diagram.json');
         return response()->download($path);
     }
 }
