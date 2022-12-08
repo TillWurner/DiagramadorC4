@@ -79,8 +79,8 @@
               $file = $row['json'];
               echo "<script>console.log({$var})</script>";
               $json = json_encode($file); */ //No se ocupa //Hasta ACA COMENTAR  
-              $file_name = 'diagram.json';
-              file_put_contents($file_name, $var);  //OCUPAR LA VAR QUE VIENE DEL CONTROLADOR file_put_contents($file_name, $var);
+              /* $file_name = 'diagram.json';
+              file_put_contents($file_name, $var);   *///OCUPAR LA VAR QUE VIENE DEL CONTROLADOR file_put_contents($file_name, $var);
               /* echo "<script>console.log({$json})</script>"; 
               header('Cache-control: private');
               header('Content-Type: application/octet-stream'); 
@@ -132,6 +132,10 @@
             /* echo '<a href="'.$file_name .'" class="btn btn-secondary">raa</a>'; */ 
         ?>  
         
+        <?php
+        $file_name = 'diagram.json';
+              file_put_contents($file_name, $var);
+        ?>
         @if ($user == $autor)
         <form method="POST" action="{{url('/diag/'.$id)}}">
           {{method_field('POST')}}
