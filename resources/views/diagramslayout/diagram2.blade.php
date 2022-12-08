@@ -53,7 +53,7 @@
         <h1 class="welcome">Piensa, diseña y </h1>
         <h1 class="welcome">programa!</h1>
         <br>
-        <button class="btn btn-secondary">Exportar Diagrama</button>
+        {{-- <button class="btn btn-secondary">Exportar Diagrama</button> --}}
         <button class="btn btn-secondary" onclick="pdf()">Exportar PDF</button>
         <button class="btn btn-secondary" onclick="makeBlob()">Exportar Jpg</button>
         <button class="btn btn-secondary" onclick="imprimir()">Imprimir</button>
