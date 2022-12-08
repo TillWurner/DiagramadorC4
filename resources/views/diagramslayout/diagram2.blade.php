@@ -79,8 +79,9 @@
               $file = $row['json'];
               echo "<script>console.log({$var})</script>";
               $json = json_encode($file); */ //No se ocupa //Hasta ACA COMENTAR  
-              $dir=public_path();
-              echo "<script>console.log({$dir})</script>";
+              /* $dir=public_path();
+              echo "<script>console.log({$dir})</script>"; */
+              chdir(public_path());
               $file_name = 'diagram.json';
               file_put_contents($dir.$file_name, $var);  //OCUPAR LA VAR QUE VIENE DEL CONTROLADOR file_put_contents($file_name, $var);
               /* echo "<script>console.log({$json})</script>"; 
