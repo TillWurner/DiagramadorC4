@@ -4,12 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class JsonController extends Controller
+class XmlController extends Controller
 {
-    public function download(){
-        $path=public_path('diagramas.json');
-        return response()->download($path);
-    }
     public function downloads(){
         $path=public_path('diagramas.xml');
         return response()->download($path);

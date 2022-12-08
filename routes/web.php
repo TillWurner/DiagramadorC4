@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JsonController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\XmlController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,4 +40,5 @@ Route::post('/shdiagram',[DiagramController::class, 'sharediag'])->name('diagram
 Route::post('/diag/{id}',[DiagramController::class, 'savediag'])->name('diagram.savediag');     /* Meter el JSON */
 Route::get('/diag/{id}',[DiagramController::class,'diag'])->name('diag');
 Route::get('/download', [JsonController::class,'download'])->name('export.json');
+Route::get('/downloads', [JsonController::class,'downloads'])->name('exportar');
 /* Route::get('/diag/{id}',[DiagramController::class,'loaddiag'])->name('load'); */

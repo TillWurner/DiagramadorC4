@@ -63,82 +63,30 @@
           {{method_field('GET')}}
            {{csrf_field()}}
            <button class="btn btn-secondary"  type="submit" >Exportar Json</button>   {{-- EL BOTON NO DEBE TENER NAME --}}
-         </form>    
+         </form>
+         <form method="GET" action="{{ route('exportar') }}">
+          {{method_field('GET')}}
+           {{csrf_field()}}
+           <button class="btn btn-secondary"  type="submit" >Exportar Xml</button>   {{-- EL BOTON NO DEBE TENER NAME --}}
+         </form>     
         @endif
         
         {{--  <a href="download.php?file=codeworld.json" class="btn btn-secondary" >Descargar</a> --}}
         {{-- <button class="btn btn-secondary" onclick="<?php json($id) ?>">Json</button> --}}
         <?php 
-        /* $db=connection_pgsql() or die('Sin conexion a la bd'); */
-            //No es necesario hacer la conexion a la bd, igual funciona ocupar la variable que viene del controlador
-               /* $db = new PDO("pgsql:host=127.0.0.1;port=5432;dbname=diagramador;user=postgres;password=zeinaldo123");
-              $query = "SELECT * FROM public.diagramas where id = $id ";
-              $result = $db->prepare($query);
-              $results = $result->execute();
-              $row = $result->fetch();   //ENCONTRO EL JSON
-              $file = $row['json'];
-              echo "<script>console.log({$var})</script>";
-              $json = json_encode($file); */ //No se ocupa //Hasta ACA COMENTAR  
-              /* $dir=public_path();
-              echo "<script>console.log({$dir})</script>"; */
-              chdir(public_path()); //Direcionar el archivo a descargar
-              $file_name = 'diagramas.json';
-              file_put_contents($file_name, $var);  //OCUPAR LA VAR QUE VIENE DEL CONTROLADOR file_put_contents($file_name, $var);
-              /* echo "<script>console.log({$json})</script>"; 
-              header('Cache-control: private');
-              header('Content-Type: application/octet-stream'); 
-              header('Content-Length: '.strlen($json));
-              header('Content-Disposition: filename=json.json');
-              flush();
-              print ($json) */
-              /* echo "<script>console.log('" . json_encode($json) . "');</script>"; */
-              /* header('Content-Type: application/json');
-              header('Content-Disposition: attachment');
-              flush();
-              print ($json); */
+        //Exportando JSON
+          chdir(public_path()); //Direcionar el archivo a descargar
+          $file_name = 'diagramas.json';
+          file_put_contents($file_name, $var);  //OCUPAR LA VAR QUE VIENE DEL CONTROLADOR file_put_contents($file_name, $var);
               
-             /*  $file_name = 'diagram.json';
-               if (file_put_contents($file_name,file_get_contents($file_name))){ */
-                //echo "<script>console.log({$file_name})</script>"; 
-                
-                 /* . 'File created' */; 
-              //};  //Hasta aca descarga en la carpeta public
-              
-              /* echo "<script>console.log('" . json_encode($file_name) . "');</script>"; */
-
-              //Prueba 1
-             /*   header('Content-Type: application/json');
-              header('Content-Description: File Transfer');
-              header('Content-Length: ' . filesize($file));
-              header('Content-Disposition: attachment; filename="'.basename($file).'"');  */
-              
-              //Prueba 2
-              /* header('Content-Type: application/json');
-              header('Content-Disposition: attachment; filename=data.json');
-              header('Expires: 0'); //No caching allowed
-              header('Cache-Control: must-revalidate'); */
-              /* header('Content-Length: ' . strlen($file)); */
-              /* file_put_contents('php://output', $file); */
-              /* readfile($file_name);
-             
-              //Prueba 3
-              /*header('Content-Disposition: attachment; filename=data.json');
-              header('Expires: 0'); //No caching allowed
-              header('Cache-Control: must-revalidate');
-              header('Content-Length: ' . strlen($file));
-              file_put_contents('php://output', $file); */
-              /* readfile($file_name);
-              exit; */
-              /* echo "<script>console.log('" . json_encode($file) . "');</script>"; 
-                  */ 
-         /*  echo '<button class="btn btn-secondary" onclick="<?php get($id) ?>">Json</button>'; */
-            /* echo '<a href="'.$file_name .'" class="btn btn-secondary">raa</a>'; */ 
+        ?>  
+        <?php 
+        //Exportando XML
+          chdir(public_path()); //Direcionar el archivo a descargar
+          $file_name = 'diagramas.xml';
+          file_put_contents($file_name, $var);  //OCUPAR LA VAR QUE VIENE DEL CONTROLADOR file_put_contents($file_name, $var);
         ?>  
         
-        <?php
-        /* $file_name = 'diagram.json';
-              file_put_contents($file_name, $var); */
-        ?>
         @if ($user == $autor)
         <form method="POST" action="{{url('/diag/'.$id)}}">
           {{method_field('POST')}}

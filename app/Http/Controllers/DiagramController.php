@@ -113,30 +113,5 @@ class DiagramController extends Controller
         $diagramas->json;
         $var = $diagramas->json;
         return view('diagramslayout.diagramgen', compact('id','var','user','autor','codigo'));
-       /*  return redirect()->route('mydiagrams'); */
-
-        /*  $diagram=Diagramas::findOrFail($id);
-        $auth = $diagram -> id_user;
-        $me = Auth()->user()->id;
-        if($auth == $me){
-            return 0;
-        } 
-        $prueba = 0;
-        $diagram=Diagramas::findOrFail($id);
-        $auth = $diagram -> id_user;
-        $idAuth = Auth()->user()->id;
-            if($auth == $idAuth){
-                  return $prueba = 1 ;
-            }
-        return  $prueba; 
-        $prueba = 0;
-        $diagram=$this->diagram->id;
-        $auth = $diagram -> id_user;
-        $idAuth = Auth()->user()->id;
-        
-            if($auth == $idAuth){
-                $prueba = 1;
-            }
-        return $prueba; */
     }
 }
