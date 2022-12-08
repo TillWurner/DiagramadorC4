@@ -79,8 +79,8 @@
               $file = $row['json'];
               echo "<script>console.log({$var})</script>";
               $json = json_encode($file); */ //No se ocupa //Hasta ACA COMENTAR  
-              /* $file_name = 'diagram.json';
-              file_put_contents($file_name, $var);  */ //OCUPAR LA VAR QUE VIENE DEL CONTROLADOR file_put_contents($file_name, $var);
+              $file_name = 'diagram.json';
+              file_put_contents($file_name, $var);  //OCUPAR LA VAR QUE VIENE DEL CONTROLADOR file_put_contents($file_name, $var);
               /* echo "<script>console.log({$json})</script>"; 
               header('Cache-control: private');
               header('Content-Type: application/octet-stream'); 
