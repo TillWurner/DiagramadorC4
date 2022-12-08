@@ -112,7 +112,7 @@ class DiagramController extends Controller
         $codigo = $diagramas->code;
         $diagramas->json;
         $var = $diagramas->json;
-        return view('diagramslayout\diagramgen', compact('id','var','user','autor','codigo'));
+        return view('diagramslayout.diagramgen', compact('id','var','user','autor','codigo'));
        /*  return redirect()->route('mydiagrams'); */
 
         /*  $diagram=Diagramas::findOrFail($id);
