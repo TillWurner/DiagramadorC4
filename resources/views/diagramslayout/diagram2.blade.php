@@ -88,15 +88,6 @@
            <button class="btn btn-secondary"  type="submit" >Guardar Diagrama</button>   {{-- EL BOTON NO DEBE TENER NAME --}}
          </form>    
         @endif
-        <form method="POST" action="{{ route('importarjson') }}">
-          {{method_field('POST')}}
-           {{csrf_field()}}
-           <label for="import" class="btn btn-secondary">
-            Importar
-           </label>
-           <input style="visibility: hidden" id="import" type="file" name="file" >
-           <button class="btn btn-secondary" type="submit" >upload</button>   {{-- EL BOTON NO DEBE TENER NAME --}}
-         </form>
           <a href={{route('home')}}>
             <button class="btn btn-secondary">Salirse</button>
           </a>

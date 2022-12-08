@@ -14,7 +14,7 @@ class JsonController extends Controller
         $path=public_path('diagramas.xml');
         return response()->download($path);
     }
-    public function importjson(Request $req){
+    /* public function importjson(Request $req){ */
 
         /** prueba **/
         /* chdir(public_path()); //Direcionar el archivo a descargar
@@ -22,7 +22,7 @@ class JsonController extends Controller
           file_put_contents($file_name, $var); */
 
        /*  $inv = $req->input('file'); */
-        $doc = file_get_contents($req->input('file'));
+     /*    $doc = file_get_contents($req->input('file'));
         return $doc;
-    }
+    } */
 }
