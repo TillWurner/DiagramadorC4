@@ -588,7 +588,7 @@
               { text: "User", figure: "BpmnTaskUser","size":"75 75", fill: "blue" }
             ], [
                 // the Palette also has a disconnected Link, which the user can drag-and-drop
-                { points: new go.List(/*go.Point*/).addAll([new go.Point(0, 0), new go.Point(30, 0), new go.Point(30, 40), new go.Point(60, 40)]) }
+                //{ points: new go.List(/*go.Point*/).addAll([new go.Point(0, 0), new go.Point(30, 0), new go.Point(30, 40), new go.Point(60, 40)]) }
               ])
           });
 
