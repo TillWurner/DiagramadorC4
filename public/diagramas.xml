@@ -1,10 +1,8 @@
 { "class": "GraphLinksModel",
   "nodeDataArray": [
-{"text":"Software System","figure":"InternalStorage","size":"75 75","fill":"lightskyblue","key":-4,"loc":"-140 10"},
-{"text":"DataBase","figure":"MagneticData","size":"75 80","fill":"lightgray","key":-3,"loc":"-300 -10"},
-{"text":"Software System","figure":"InternalStorage","size":"75 75","fill":"lightskyblue","key":-5,"loc":"-440 -60"},
-{"text":"Mobile app","figure":"Procedure","size":"75 75","fill":"#CE0620","key":-6,"loc":"-420 170"},
-{"text":"Class","figure":"Class","size":"75 75","fill":"white","key":-7,"loc":"-110 280"},
-{"text":"HOLAAA","figure":"Rectangle","size":"75 80","fill":"blue","key":-2,"loc":"-220 140"}
+{"text":"Component","figure":"Rectangle","size":"75 80","fill":"blue","key":-2,"loc":"-110 -250"},
+{"text":"DataBase","figure":"MagneticData","size":"75 80","fill":"lightgray","key":-3,"loc":"-300 -300"},
+{"text":"Software System","figure":"InternalStorage","size":"75 75","fill":"lightskyblue","key":-4,"loc":"-320 -120"},
+{"text":"HOLAAAAAAAAAA","figure":"CreateRequest","size":"75 75","fill":"lightskyblue","key":-5,"loc":"-490 -290"}
 ],
   "linkDataArray": []}

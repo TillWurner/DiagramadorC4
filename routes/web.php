@@ -41,4 +41,5 @@ Route::post('/diag/{id}',[DiagramController::class, 'savediag'])->name('diagram.
 Route::get('/diag/{id}',[DiagramController::class,'diag'])->name('diag');
 Route::get('/download', [JsonController::class,'download'])->name('export.json');
 Route::get('/downloads', [JsonController::class,'downloads'])->name('exportar');
+Route::post('/upload',[JsonController::class,'importjson'])->name('importarjson');
 /* Route::get('/diag/{id}',[DiagramController::class,'loaddiag'])->name('load'); */

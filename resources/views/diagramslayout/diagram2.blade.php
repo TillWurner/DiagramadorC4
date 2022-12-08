@@ -2,10 +2,6 @@
 <link rel="stylesheet" href={{asset("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css")}} integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 {{-- ***CSS*** --}}
 <link rel="stylesheet" href={{ asset('gojscss/diagram.css') }}>
-{{-- ***ParaPdf*** --}}
-{{-- <script src="https://unpkg.com/gojs"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script> --}}
-{{-- ***ParaPdf*** --}}
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
@@ -53,7 +49,6 @@
         <h1 class="welcome">Piensa, diseña y </h1>
         <h1 class="welcome">programa!</h1>
         <br>
-        {{-- <button class="btn btn-secondary">Exportar Diagrama</button> --}}
         <button class="btn btn-secondary" onclick="pdf()">Exportar PDF</button>
         <button class="btn btn-secondary" onclick="makeBlob()">Exportar Jpg</button>
         <button class="btn btn-secondary" onclick="imprimir()">Imprimir</button>
@@ -71,8 +66,6 @@
          </form>     
         @endif
         
-        {{--  <a href="download.php?file=codeworld.json" class="btn btn-secondary" >Descargar</a> --}}
-        {{-- <button class="btn btn-secondary" onclick="<?php json($id) ?>">Json</button> --}}
         <?php 
         //Exportando JSON
           chdir(public_path()); //Direcionar el archivo a descargar
@@ -95,16 +88,20 @@
            <button class="btn btn-secondary"  type="submit" >Guardar Diagrama</button>   {{-- EL BOTON NO DEBE TENER NAME --}}
          </form>    
         @endif
-          {{-- <button type="submit"><ion-icon name="trash-outline"></ion-icon></button> --}} {{-- Boton bonito --}}
+        <form method="POST" action="{{ route('importarjson') }}">
+          {{method_field('POST')}}
+           {{csrf_field()}}
+           <label for="import" class="btn btn-secondary">
+            Importar
+           </label>
+           <input style="visibility: hidden" id="import" type="file" name="file" >
+           <button class="btn btn-secondary" type="submit" >upload</button>   {{-- EL BOTON NO DEBE TENER NAME --}}
+         </form>
           <a href={{route('home')}}>
             <button class="btn btn-secondary">Salirse</button>
           </a>
     </div>
     
-    <!-- * * * * * * * * * * * * * -->
-    <!-- Start of GoJS sample code -->
-
-    {{-- AQUI EMPIEZA LO DIVERTIDO XD --}}
   <script src="https://unpkg.com/gojs@2.2.17/release/go.js"></script>
   <div id="allSampleContent" class="p-4 w-full">
   <script src="https://unpkg.com/gojs@2.2.17/extensions/Figures.js"></script>
@@ -119,8 +116,6 @@
         socket.emit('unirme_sala', sala );
     function init() {
 
-      // Since 2.2 you can also author concise templates with method chaining instead of GraphObject.make
-      // For details, see https://gojs.net/latest/intro/buildingObjects.html
       const $ = go.GraphObject.make;
 
       myDiagram =
@@ -228,11 +223,6 @@
           )
         );
 
-      // Node selection adornment
-      // Include four large triangular buttons so that the user can easily make a copy
-      // of the node, move it to be in that direction relative to the original node,
-      // and add a link to the new node.
-
       function makeArrowButton(spot, fig) {
         var maker = (e, shape) => {
             e.handled = true;
@@ -299,14 +289,6 @@
           CMButton({ alignment: new go.Spot(0.75, 0) })
         );
 
-      // Common context menu button definitions
-
-      // All buttons in context menu work on both click and contextClick,
-      // in case the user context-clicks on the button.
-      // All buttons modify the node data, not the Node, so the Bindings need not be TwoWay.
-
-      // A button-defining helper function that returns a click event handler.
-      // PROPNAME is the name of the data property that should be set to the given VALUE.
       function ClickFunction(propname, value) {
         return (e, obj) => {
             e.handled = true;  // don't let the click bubble up
@@ -601,11 +583,6 @@
           });
       }
 
-      // Link context menu
-      // All buttons in context menu work on both click and contextClick,
-      // in case the user context-clicks on the button.
-      // All buttons modify the link data, not the Link, so the Bindings need not be TwoWay.
-
       function ArrowButton(num) {
         var geo = "M0 0 M16 16 M0 8 L16 8  M12 11 L16 8 L12 5";
         if (num === 0) {
@@ -696,9 +673,6 @@
 
       load();
     }
-
-    // Show the diagram's model in JSON format
-    /* $doc = JSON.stringify(document.getElementById("mySavedModel").value); */
     function save() {
       /* savediag(document.getElementById("mySavedModel").value); */
       $doc = document.getElementById("mySavedModel").value;
