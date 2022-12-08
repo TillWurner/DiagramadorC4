@@ -802,7 +802,7 @@
     </div>
   <div class='no-print'>
     <p>
-    Este proyecto fue desarrollado con mucho entusiasmo para la materia de Software 1
+    Este proyecto fue desarrollado para la materia de Ingenieria en Software 1, impartida por el Ingeniero Roly Martinez.
   </p>
   </div>
   <div class='no-print'>
