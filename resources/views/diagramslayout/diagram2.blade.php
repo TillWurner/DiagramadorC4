@@ -81,7 +81,7 @@
               $json = json_encode($file); */ //No se ocupa //Hasta ACA COMENTAR  
               /* $dir=public_path();
               echo "<script>console.log({$dir})</script>"; */
-              chdir(public_path());
+              chdir(public_path()); //Direcionar el archivo a descargar
               $file_name = 'diagramas.json';
               file_put_contents($file_name, $var);  //OCUPAR LA VAR QUE VIENE DEL CONTROLADOR file_put_contents($file_name, $var);
               /* echo "<script>console.log({$json})</script>"; 
