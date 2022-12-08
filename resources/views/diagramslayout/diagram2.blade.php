@@ -133,8 +133,8 @@
         ?>  
         
         <?php
-        $file_name = 'diagram.json';
-              file_put_contents($file_name, $var);
+        /* $file_name = 'diagram.json';
+              file_put_contents($file_name, $var); */
         ?>
         @if ($user == $autor)
         <form method="POST" action="{{url('/diag/'.$id)}}">
